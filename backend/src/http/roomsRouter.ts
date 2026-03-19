@@ -112,7 +112,7 @@ router.get("/rooms/:id", requireAuth, async (req, res) => {
     const [room] = await db
       .select()
       .from(rooms)
-      .where(eq(rooms.id, req.params.id))
+      .where(eq(rooms.id, req.params.id as string))
       .limit(1);
 
     if (!room) {
@@ -200,7 +200,7 @@ router.put("/rooms/:id", requireAuth, requireAdmin, async (req, res) => {
     const [room] = await db
       .update(rooms)
       .set(patch)
-      .where(eq(rooms.id, req.params.id))
+      .where(eq(rooms.id, req.params.id as string))
       .returning();
 
     if (!room) {
@@ -233,7 +233,7 @@ router.patch(
       const [room] = await db
         .update(rooms)
         .set({ botAllowed, updatedAt: new Date() })
-        .where(eq(rooms.id, req.params.id))
+        .where(eq(rooms.id, req.params.id as string))
         .returning();
 
       if (!room) {
@@ -256,7 +256,7 @@ router.delete("/rooms/:id", requireAuth, requireAdmin, async (req, res) => {
   try {
     const [room] = await db
       .delete(rooms)
-      .where(eq(rooms.id, req.params.id))
+      .where(eq(rooms.id, req.params.id as string))
       .returning();
 
     if (!room) {
