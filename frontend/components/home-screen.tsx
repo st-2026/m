@@ -52,6 +52,7 @@ function centsToLabel(cents: number): string {
 
 export function HomeScreen() {
   const router = useRouter();
+  const authT = useTranslations("auth");
   const [state, setState] = useState<LoadingState>("boot");
   const [showDevAuth, setShowDevAuth] = useState(false);
   const [devAuthMode, setDevAuthMode] = useState<DevAuthMode>("login");
@@ -139,7 +140,6 @@ export function HomeScreen() {
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   if (state === "boot") {
-    const authT = useTranslations("auth");
 
     return (
       <main className="min-h-svh bg-background flex flex-col items-center justify-center p-6 text-foreground relative overflow-hidden">
