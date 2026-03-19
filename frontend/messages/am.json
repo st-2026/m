@@ -26,7 +26,9 @@
     "openBot": "ቦቱን ክፈት",
     "started": "ጀምሬአለሁ",
     "checking": "በመረጋገጥ ላይ...",
-    "openingTelegram": "ቴሌግራምን በመክፈት ላይ..."
+    "openingTelegram": "ቴሌግራምን በመክፈት ላይ...",
+    "booting": "የቢንጎ ጉዞ ይጀምራል",
+    "loadingApp": "መተግበሪያውን በማዘጋጀት ላይ..."
   },
   "settings": {
     "title": "ማስተካከያ",
@@ -40,7 +42,6 @@
         },
         "backgroundMusic": {
           "label": "የጀርባ ሙዚቃ",
-
           "desc": "በጨዋታ ሂደት ውስጥ የአካባቢ ሙዚቃ"
         },
         "haptics": {
@@ -111,7 +112,6 @@
     "winRibbon": "አሸነፉ",
     "winTitleSelf": "ጨዋታውን አሸነፉ!",
     "winTitleOther": "{name} ጨዋታውን አሸነፉ!",
-
     "lostRibbon": "ተቃርበው ነበር!",
     "boardLabel": "የእርስዎ ቦርድ #{number}",
     "playerFallback": "ተጫዋች",
@@ -476,7 +476,6 @@
       "rejected": "የተሰረዘ"
     }
   },
-
   "depositForm": {
     "title": "ገንዘብ ማስገቢያ",
     "subtitle": "የተመዘገበውን የክፍያ SMS መልዕክት በታች ያለውን ቦታ ውስጥ ይለጥፉ።",
@@ -777,7 +776,6 @@
         "bonus": "የአስተዳዳሪ ቦነስ",
         "grant": "ቦነስ ስጥ"
       },
-
       "actions": {
         "save": "ቅንብሮችን አስቀምጥ",
         "saveWelcome": "የእንኳን ደህና መጡ ቦነስ አስቀምጥ",

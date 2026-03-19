@@ -24,7 +24,7 @@ export function BottomNav() {
   if (!user) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-6 flex justify-center pointer-events-none">
+    <div className="fixed bottom-0 left-0 right-0 z-50 px-4  flex justify-center pointer-events-none">
       <div className="relative w-full max-w-[440px] flex items-center justify-between bg-zinc-950/80 backdrop-blur-3xl border border-white/5 rounded-[32px] px-2 py-3 shadow-[0_20px_50px_rgba(0,0,0,0.5)] pointer-events-auto">
         {/* Active Background Notch/Glow (Simulated) */}
         <div className="absolute inset-0 rounded-[32px] overflow-hidden pointer-events-none">
@@ -77,20 +77,12 @@ export function BottomNav() {
                 className={cn(
                   "text-[10px] font-bold mt-1 transition-all duration-300 tracking-tight",
                   isActive
-                    ? "text-blue-500 mt-6"
+                    ? "text-blue-500 "
                     : "text-zinc-500 group-hover:text-zinc-400",
                 )}
               >
                 {item.label}
               </span>
-
-              {/* Dot indicator for active (alternative to label shift if needed) */}
-              {isActive && (
-                <motion.div
-                  layoutId="activeDot"
-                  className="absolute -bottom-1 size-1 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,1)]"
-                />
-              )}
             </Link>
           );
         })}

@@ -26,7 +26,9 @@
     "openBot": "Open bot",
     "started": "I've started",
     "checking": "Checking...",
-    "openingTelegram": "Opening Telegram..."
+    "openingTelegram": "Opening Telegram...",
+    "booting": "Bingo Journey Starts",
+    "loadingApp": "Preparing your experience..."
   },
   "settings": {
     "title": "Settings",

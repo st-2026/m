@@ -15,6 +15,7 @@ import {
   Wallet,
   Zap,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import type { Socket } from "socket.io-client";
 import { MobileHeader } from "@/components/mobile-header";
 import { BalanceCard } from "@/components/balance-card";
@@ -31,6 +32,7 @@ import {
 } from "@/lib/api";
 import { closeSocket, connectSocket } from "@/lib/socket";
 import { getTelegramInitData, initTelegramWebApp } from "@/lib/telegram";
+import { useTranslations } from "next-intl";
 
 type LoadingState = "boot" | "ready" | "error";
 type DevAuthMode = "login" | "signup";
@@ -137,13 +139,84 @@ export function HomeScreen() {
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   if (state === "boot") {
+    const authT = useTranslations("auth");
+
     return (
-      <main className="min-h-screen bg-background p-4 text-foreground">
-        <div className="relative mx-auto mt-40 max-w-md text-center">
-          <p className="text-sm uppercase tracking-[0.24em] text-cyan-200">
-            Mella Bingo
-          </p>
-          <p className="mt-3 text-lg font-semibold">Loading your Mini App...</p>
+      <main className="min-h-svh bg-background flex flex-col items-center justify-center p-6 text-foreground relative overflow-hidden">
+        {/* Animated Background Orbs */}
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.1, 0.2, 0.1],
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-primary/20 rounded-full blur-[80px] pointer-events-none"
+        />
+
+        <div className="relative z-10 flex flex-col items-center max-w-xs w-full">
+          {/* Animated Logo/Ball */}
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="relative"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              className="size-24 rounded-full border-2 border-dashed border-primary/30 p-2"
+            >
+              <div className="size-full rounded-full bg-linear-to-tr from-primary/20 to-primary/5 flex items-center justify-center border border-primary/20 shadow-2xl shadow-primary/20">
+                <Sparkles size={32} className="text-primary animate-pulse" />
+              </div>
+            </motion.div>
+
+            {/* Spinning Rings */}
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              className="absolute -inset-4 border border-t-primary/40 border-r-transparent border-b-primary/40 border-l-transparent rounded-full opacity-50"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="mt-10 text-center space-y-3"
+          >
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/60">
+              {authT("booting")}
+            </p>
+            <h2 className="text-xl font-bold tracking-tight bg-linear-to-b from-foreground to-foreground/60 bg-clip-text text-transparent italic">
+              Mella Bingo
+            </h2>
+
+            <div className="flex flex-col items-center gap-4 mt-6">
+              <p className="text-xs font-medium text-muted-foreground/80 animate-pulse">
+                {authT("loadingApp")}
+              </p>
+
+              {/* Custom Progress Bar */}
+              <div className="w-32 h-1 bg-zinc-900 rounded-full overflow-hidden border border-white/5">
+                <motion.div
+                  initial={{ x: "-100%" }}
+                  animate={{ x: "0%" }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="size-full bg-linear-to-r from-transparent via-primary to-transparent"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Decorative elements */}
+        <div className="absolute bottom-12 text-[10px] font-black uppercase tracking-[0.15em] text-foreground/20">
+          Secure Game Engine 2.0
         </div>
       </main>
     );
