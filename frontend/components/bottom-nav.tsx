@@ -55,8 +55,17 @@ export function BottomNav() {
                   <div className="absolute inset-0 rounded-full bg-linear-to-b from-white/20 to-transparent pointer-events-none" />
                   <Icon size={24} className="text-white" strokeWidth={2.5} />
 
+                  {/* Label */}
+                  <span
+                    className={cn(
+                      "text-[10px] font-bold mt-1 transition-all duration-300 tracking-tight",
+                      isActive ? "text-white " : "text-zinc-500",
+                    )}
+                  >
+                    {item.label}
+                  </span>
                   {/* Outer Glow */}
-                  <div className="absolute -inset-1 rounded-full bg-blue-500/20 blur-md -z-10 animate-pulse" />
+                  <div className="absolute -inset-2 rounded-full bg-blue-500/20 blur-md -z-10 animate-pulse" />
                 </motion.div>
               )}
 
@@ -79,7 +88,7 @@ export function BottomNav() {
                 className={cn(
                   "text-[10px] font-bold mt-1 transition-all duration-300 tracking-tight",
                   isActive
-                    ? "text-blue-500 "
+                    ? "hidden "
                     : "text-zinc-500 group-hover:text-zinc-400",
                 )}
               >

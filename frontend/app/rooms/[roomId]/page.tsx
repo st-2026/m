@@ -304,7 +304,7 @@ export default function RoomPage() {
           </div>
         </div>
 
-        <div className="flex-1 max-h-[calc(100vh-200px)] pb-16 overflow-y-auto custom-scrollbar pr-1">
+        <div className="flex-1 max-h-[calc(100vh-300px)] pb-16 overflow-y-auto custom-scrollbar pr-1">
           <div className="grid grid-cols-8 gap-2 pb-4">
             {numbers.map((n) => {
               const isSelected = picked === n;
@@ -328,7 +328,7 @@ export default function RoomPage() {
         </div>
       </div>
 
-      <div className="fixed bottom-12 left-0 right-0 p-4 bg-linear-to-t from-[#121212] via-[#121212] to-transparent z-20 max-w-[430px] mx-auto">
+      <div className="fixed bottom-16 left-0 right-0 p-4 bg-linear-to-t from-[#121212] via-[#121212] to-transparent z-20 max-w-[430px] mx-auto">
         <p className="mb-2 text-center text-[11px] font-bold uppercase tracking-wider text-foreground/60">
           {picked ? "1 board selected" : "Select one board"}
         </p>
