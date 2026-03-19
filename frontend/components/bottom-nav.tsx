@@ -23,6 +23,8 @@ export function BottomNav() {
 
   if (!user) return null;
 
+  if (pathname.includes("game")) return null;
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 px-4  flex justify-center pointer-events-none">
       <div className="relative w-full max-w-[440px] flex items-center justify-between bg-zinc-950/80 backdrop-blur-3xl border border-white/5 rounded-[32px] px-2 py-3 shadow-[0_20px_50px_rgba(0,0,0,0.5)] pointer-events-auto">
