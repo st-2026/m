@@ -116,7 +116,11 @@ export const rooms = pgTable(
     description: text("description"),
     boardPriceCents: bigint("board_price_cents", { mode: "number" }).notNull(),
     status: roomStatusEnum("status").default("active").notNull(),
+    color: text("color").notNull().default("from-blue-500 to-blue-700"),
+    minPlayers: integer("min_players").default(2),
     maxPlayers: integer("max_players"),
+    icon: text("icon"),
+    botAllowed: boolean("bot_allowed").default(false).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()
       .notNull(),

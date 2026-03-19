@@ -1,7 +1,20 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { HomeSnapshot } from "@/types/home";
+import type {
+  Transaction,
+  TransactionType,
+  WalletData,
+  Withdrawal,
+  WithdrawalEligibility,
+} from "./types";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+
+function getAuthToken() {
+  if (typeof window === "undefined") return "";
+  return localStorage.getItem("mella_token") || "";
+}
 
 export async function verifyTelegramAndGetToken(
   initData: string,
@@ -89,6 +102,59 @@ export async function fetchHomeSnapshot(token: string): Promise<HomeSnapshot> {
 
 export function getApiBase() {
   return API_BASE;
+}
+
+export type RoomItem = {
+  id: string;
+  name: string;
+  description: string | null;
+  boardPriceCents: number;
+  price: string;
+  color: string;
+  icon: string | null;
+  minPlayers: number | null;
+  maxPlayers: number | null;
+  isLive: boolean;
+};
+
+export async function fetchRooms(
+  token: string,
+): Promise<RoomItem[]> {
+  const res = await fetch(`${API_BASE}/rooms`, {
+    method: "GET",
+    headers: { authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("rooms_fetch_failed");
+  }
+
+  const json = (await res.json()) as { rooms: RoomItem[] };
+  return json.rooms;
+}
+
+export type WalletSummary = {
+  currency: string;
+  balanceCents: number;
+  bonusCents: number;
+};
+
+export async function fetchWallet(
+  token: string,
+): Promise<WalletSummary> {
+  const res = await fetch(`${API_BASE}/me/wallet`, {
+    method: "GET",
+    headers: { authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("wallet_fetch_failed");
+  }
+
+  const json = (await res.json()) as { ok: boolean; wallet: WalletSummary };
+  return json.wallet;
 }
 
 export type ViewerResult = {
@@ -323,3 +389,297 @@ export async function submitBingoClaim(
     } | null;
   };
 }
+
+export async function fetchTransactions(
+  token: string,
+  tab: string = "all",
+): Promise<Transaction[]> {
+  const res = await fetch(`${API_BASE}/me/wallet/transactions`, {
+    headers: { authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("transactions_fetch_failed");
+  const json = await res.json();
+  const txs = (json.transactions || []).map((ledger: any) => {
+    let type: TransactionType = "bonus";
+    switch (ledger.entryType) {
+      case "deposit":
+        type = "deposit";
+        break;
+      case "withdrawal":
+        type = "withdrawal";
+        break;
+      case "session_win":
+        type = "game_win";
+        break;
+      case "board_purchase":
+        type = "game_lost";
+        break;
+      case "commission":
+        type = "referral_commission";
+        break;
+      case "referral_reward":
+        type = "referral_reward";
+        break;
+    }
+    return {
+      id: ledger.id,
+      type,
+      amount: (ledger.amountCents / 100).toFixed(2),
+      status: ledger.status === "posted" ? "completed" : "failed",
+      description: ledger.metadata?.phone || ledger.entryType,
+      createdAt: ledger.createdAt,
+    } as Transaction;
+  });
+
+  if (tab === "in") return txs.filter((t: any) => parseFloat(String(t.amount)) > 0);
+  if (tab === "out") return txs.filter((t: any) => parseFloat(String(t.amount)) < 0);
+  return txs;
+}
+
+export function useGetWalletQuery(_?: any, options?: { skip?: boolean }) {
+  const token = getAuthToken();
+  const query = useQuery({
+    queryKey: ["wallet"],
+    queryFn: () => fetchWallet(token),
+    enabled: !options?.skip && !!token,
+  });
+  return {
+    data: query.data
+      ? {
+          balance: query.data.balanceCents / 100,
+          bonus: query.data.bonusCents / 100,
+          currency: query.data.currency,
+        }
+      : undefined,
+    isLoading: query.isLoading,
+  };
+}
+
+export function useGetTransactionsQuery(
+  tab: string = "all",
+  options?: { skip?: boolean },
+) {
+  const token = getAuthToken();
+  const query = useQuery({
+    queryKey: ["transactions", tab],
+    queryFn: () => fetchTransactions(token, tab),
+    enabled: !options?.skip && !!token,
+  });
+  return { data: query.data, isLoading: query.isLoading, refetch: query.refetch };
+}
+
+export function useDepositMutation() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: async (input: { amount: number }) => {
+      const res = await fetch(`${API_BASE}/wallet/deposit`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify(input),
+      });
+      const data = await res.json();
+      if (!res.ok) throw { data };
+      return { ...data, success: data.ok };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["wallet"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+  });
+
+  const mutate = (input: { amount: number }) => {
+    const promise = mutation.mutateAsync(input);
+    return Object.assign(promise, { unwrap: () => promise });
+  };
+
+  return [mutate, { isLoading: mutation.isPending }] as const;
+}
+
+export function useWithdrawMutation() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: async (input: { amount: number; method: string }) => {
+      const res = await fetch(`${API_BASE}/wallet/withdraw`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify(input),
+      });
+      const data = await res.json();
+      if (!res.ok) throw { data };
+      return { ...data, success: data.ok };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["wallet"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+  });
+
+  const mutate = (input: { amount: number; method: string }) => {
+    const promise = mutation.mutateAsync(input);
+    return Object.assign(promise, { unwrap: () => promise });
+  };
+
+  return [mutate, { isLoading: mutation.isPending }] as const;
+}
+
+export function useCreateWithdrawalMutation() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: async (input: { amount: number; phone: string }) => {
+      const res = await fetch(`${API_BASE}/wallet/withdraw`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify(input),
+      });
+      const data = await res.json();
+      if (!res.ok) throw { data };
+      return { ...data, success: data.ok };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["wallet"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["withdrawals"] });
+    },
+  });
+
+  const mutate = (input: { amount: number; phone: string }) => {
+    const promise = mutation.mutateAsync(input);
+    return Object.assign(promise, { unwrap: () => promise });
+  };
+
+  return [mutate, { isLoading: mutation.isPending }] as const;
+}
+
+export function useGetUserWithdrawalsQuery(
+  _?: any,
+  options?: { skip?: boolean },
+) {
+  const { data, isLoading } = useGetTransactionsQuery("all", options);
+  return {
+    data: {
+      withdrawals:
+        (data
+          ?.filter((t) => t.type === "withdrawal")
+          .map((t) => ({
+            id: t.id,
+            amount: t.amount,
+            phone: t.description || "",
+            status: (t.status === "completed"
+              ? "approved"
+              : t.status === "rejected"
+                ? "rejected"
+                : "pending") as Withdrawal["status"],
+            rejectionReason: null,
+            createdAt: t.createdAt,
+          })) as Withdrawal[]) || [],
+    },
+    isLoading,
+  };
+}
+
+export function useGetWithdrawalEligibilityQuery(
+  _?: any,
+  options?: { skip?: boolean },
+) {
+  const { data: wallet } = useGetWalletQuery(undefined, options);
+  return {
+    data: {
+      eligible: (wallet?.balance || 0) >= 100,
+      balance: wallet?.balance || 0,
+      minWithdrawalAmount: 100,
+      minAccountLeft: 50,
+      minDepositRequired: 50,
+      gamesRequired: 20,
+      gamesPlayed: 10,
+      totalDeposit: 50,
+      hasPending: false,
+    },
+    isLoading: false,
+  };
+}
+
+export function useLogoutMutation() {
+  const mutation = useMutation({
+    mutationFn: async () => {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("mella_token");
+        localStorage.removeItem("auth_token");
+      }
+      return { success: true };
+    },
+  });
+
+  const mutate = (input: any) => {
+    const promise = mutation.mutateAsync(input);
+    return Object.assign(promise, { unwrap: () => promise });
+  };
+
+  return [mutate, { isLoading: mutation.isPending }] as const;
+}
+
+export function useGetGameStatsQuery(_?: any, options?: { skip?: boolean }) {
+  const token = getAuthToken();
+  const query = useQuery({
+    queryKey: ["game-stats"],
+    queryFn: async () => {
+      const res = await fetch(`${API_BASE}/me/dashboard`, {
+        headers: { authorization: `Bearer ${token}` },
+        cache: "no-store",
+      });
+      if (!res.ok) throw new Error("stats_fetch_failed");
+      const json = await res.json();
+      return {
+        played: json.dashboard?.totalTransactions || 0,
+        won: Math.floor((json.dashboard?.winsCents || 0) / 1000), // Mocking win count from cents
+      };
+    },
+    enabled: !options?.skip && !!token,
+  });
+  return { data: query.data, isLoading: query.isLoading };
+}
+
+export function useApproveDepositMutation() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: async (input: {
+      amount: number;
+      sms_content: string;
+      user_id: string;
+      promoCode?: string;
+    }) => {
+      const res = await fetch(`${API_BASE}/payments/submit`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify(input),
+      });
+      const data = await res.json();
+      if (!res.ok) throw { data };
+      return { ...data, success: data.ok || data.success };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["wallet"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+  });
+
+  const mutate = (input: any) => {
+    const promise = mutation.mutateAsync(input);
+    return Object.assign(promise, { unwrap: () => promise });
+  };
+
+  return [mutate, { isLoading: mutation.isPending }] as const;
+}
+

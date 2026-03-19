@@ -92,6 +92,7 @@ export async function listAvailableRooms(identity: RequestIdentity) {
         description: rooms.description,
         boardPriceCents: rooms.boardPriceCents,
         agentId: rooms.agentId,
+        color: rooms.color,
       })
       .from(rooms)
       .where(eq(rooms.status, "active"))
@@ -106,6 +107,7 @@ export async function listAvailableRooms(identity: RequestIdentity) {
         description: rooms.description,
         boardPriceCents: rooms.boardPriceCents,
         agentId: rooms.agentId,
+        color: rooms.color,
       })
       .from(rooms)
       .where(
@@ -125,6 +127,7 @@ export async function listAvailableRooms(identity: RequestIdentity) {
       description: rooms.description,
       boardPriceCents: rooms.boardPriceCents,
       agentId: rooms.agentId,
+      color: rooms.color,
     })
     .from(rooms)
     .where(and(eq(rooms.status, "active"), eq(rooms.agentId, identity.agentId)))
@@ -254,6 +257,7 @@ export async function getMiniHomePayload(identity: RequestIdentity) {
       priceLabel: `${centsToEtbString(room.boardPriceCents)} ETB`,
       ctaLabel: "PLAY NOW",
       emoji: theme.emoji,
+      color: room.color,
       style: {
         gradientFrom: theme.gradientFrom,
         gradientTo: theme.gradientTo,

@@ -248,7 +248,7 @@ export default function RoomPage() {
   }
 
   return (
-    <div className="min-h-screen max-h-screen bg-background text-foreground flex flex-col max-w-[430px] mx-auto overflow-hidden relative">
+    <div className="min-h-screen max-h-screen bg-background text-foreground flex flex-col max-w-[430px] w-full mx-auto overflow-hidden relative">
       <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none select-none overflow-hidden">
         <div className="text-foreground text-[15vw] font-black whitespace-pre-wrap leading-none opacity-20 transform -rotate-12 translate-y-[-10%]">
           {bgNumbers.map((num, idx) => (

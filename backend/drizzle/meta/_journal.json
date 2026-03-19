@@ -22,6 +22,20 @@
       "when": 1773170000000,
       "tag": "0002_lucky_promotions",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1773946457307,
+      "tag": "0003_add-room-color",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1773947348710,
+      "tag": "0004_add-room-fields",
+      "breakpoints": true
     }
   ]
 }

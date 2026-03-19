@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Trophy, XCircle, Zap, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
 import { Confetti } from "./coffetti";
 
 interface GameResultViewProps {
@@ -35,7 +34,6 @@ export function GameResultView({
   onAction,
   onSecondaryAction,
 }: GameResultViewProps) {
-  const t = useTranslations("gameResult");
   const [showConfetti, setShowConfetti] = useState(false);
   const isWin = status === "won";
   const isLost = status === "lost";
@@ -104,11 +102,11 @@ export function GameResultView({
         >
           {isWin
             ? isCurrentUser
-              ? t("title.winSelf")
-              : t("title.winOther", { name: playerName })
+              ? "You Won"
+              : `${playerName} Won`
             : isDraw
-              ? t("title.draw")
-              : t("title.lost", { name: playerName })}
+              ? "Draw"
+              : `${playerName} Lost`}
         </motion.h2>
 
         {/* Board Number */}
@@ -118,7 +116,7 @@ export function GameResultView({
           transition={{ delay: 0.3 }}
           className="text-sm font-bold text-muted-foreground uppercase tracking-[0.2em] mb-10"
         >
-          {t("boardLabel", { number: boardNumber + 1 })}
+          Board {boardNumber + 1}
         </motion.p>
 
         {/* Bingo Board Display */}
@@ -182,7 +180,7 @@ export function GameResultView({
                       >
                         {num === 0 ? (
                           <span className="text-[10px] md:text-xs font-black">
-                            {t("free")}
+                            Free
                           </span>
                         ) : (
                           num
@@ -205,7 +203,7 @@ export function GameResultView({
             className="w-full max-w-md bg-linear-to-r from-destructive/10 to-red-600/5 border border-destructive/20 rounded-3xl p-6 mb-10"
           >
             <p className="text-base font-medium text-center text-foreground/80">
-              {t("consolation")}
+              Better luck next time!
             </p>
           </motion.div>
         )}
@@ -221,7 +219,7 @@ export function GameResultView({
             onClick={onAction}
             className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-base shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all bg-linear-to-r from-primary to-accent text-white"
           >
-            {isWin ? t("cta.continue") : t("cta.playAgain")}
+            {isWin ? "Continue" : "Play Again"}
           </Button>
 
           <Button
@@ -229,7 +227,7 @@ export function GameResultView({
             onClick={onSecondaryAction}
             className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-base bg-white/5 border-white/10 hover:bg-white/10 backdrop-blur-sm transition-all"
           >
-            {t("cta.exit")}
+            Exit
           </Button>
         </motion.div>
 
@@ -240,7 +238,7 @@ export function GameResultView({
           transition={{ delay: 0.7 }}
           className="text-sm font-medium text-muted-foreground mt-12 text-center max-w-xs opacity-60"
         >
-          {isWin ? t("footer.win") : t("footer.other")}
+          {isWin ? "You played well!" : "You played well!"}
         </motion.p>
       </motion.div>
     </div>

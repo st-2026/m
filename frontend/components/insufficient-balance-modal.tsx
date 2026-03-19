@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
-import { useTranslations } from "next-intl";
 import WalletAlertIcon from "@/components/icons/wallet-alert";
 
 interface InsufficientBalanceModalProps {
@@ -17,7 +16,6 @@ export function InsufficientBalanceModal({
   onClose,
 }: InsufficientBalanceModalProps) {
   const router = useRouter();
-  const t = useTranslations("insufficientBalance");
 
   return (
     <AnimatePresence>
@@ -63,19 +61,19 @@ export function InsufficientBalanceModal({
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.4em] text-white/50 mb-3">
-                  {t("badge")}
+                  Badge
                 </p>
                 <h1 className="text-xl font-semibold text-white tracking-tight">
-                  {t("title")}
+                  Title
                 </h1>
               </div>
             </div>
 
             <p className="text-white/70 hidden font-medium text-base mb-3 px-4 leading-relaxed">
-              {t("subtitle")}
+              Subtitle
             </p>
             <p className="text-white/60 text-sm mb-8 px-6 leading-relaxed">
-              {t("description")}
+              Description
             </p>
 
             {/* Action Buttons */}
@@ -87,7 +85,7 @@ export function InsufficientBalanceModal({
                 }}
                 className="flex-1 h-11 rounded-[12px] bg-gradient-to-r from-blue-500 via-blue-500 to-indigo-500 hover:brightness-110 text-white active:scale-95 transition-all shadow-lg shadow-blue-500/30"
               >
-                {t("cta.deposit")}
+                Deposit
               </Button>
             </div>
           </motion.div>

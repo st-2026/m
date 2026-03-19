@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Play, RefreshCcw, Timer, Trophy } from "lucide-react";
 import { BingoBoard } from "./bingo-board";
-import { useTranslations } from "next-intl";
 
 interface GameViewProps {
   session: any;
@@ -35,7 +34,6 @@ export function GameView({
   handleCellClick,
 }: GameViewProps) {
   const isPlaying = session?.status === "playing";
-  const t = useTranslations("gameView");
 
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 w-full px-4 py-8 relative">
@@ -79,7 +77,7 @@ export function GameView({
                   </span>
                   {!isPlaying && (
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 -mt-2">
-                      {t("ready")}
+                      Ready
                     </span>
                   )}
                 </div>
@@ -111,7 +109,7 @@ export function GameView({
                   isPlaying ? "bg-accent animate-pulse" : "bg-muted-foreground",
                 )}
               />
-              {isPlaying ? t("liveBroadcast") : t("sessionStandby")}
+              {isPlaying ? "Live Broadcast" : "Session Standby"}
             </div>
           </div>
         </div>
@@ -126,10 +124,10 @@ export function GameView({
               <Button
                 size="lg"
                 onClick={startGame}
-                className="w-full h-16 rounded-[1.5rem] text-lg font-black tracking-widest bg-gradient-to-r from-primary to-blue-500 hover:from-primary/90 hover:to-blue-400 shadow-[0_10px_30px_rgba(59,130,246,0.3)] border-0 transition-transform active:scale-95 group"
+                className="w-full h-16 rounded-3xl text-lg font-black tracking-widest bg-linear-to-r from-primary to-blue-500 hover:from-primary/90 hover:to-blue-400 shadow-[0_10px_30px_rgba(59,130,246,0.3)] border-0 transition-transform active:scale-95 group"
               >
                 <Play className="mr-2 fill-current group-hover:translate-x-1 transition-transform" />{" "}
-                {t("start")}
+                Start
               </Button>
             </motion.div>
           )}
@@ -140,10 +138,10 @@ export function GameView({
             <div className="flex items-center justify-between mb-5 relative z-10">
               <div>
                 <span className="text-[10px] font-black text-white/50 uppercase tracking-[0.2em] block mb-1">
-                  {t("queue")}
+                  Queue
                 </span>
                 <h4 className="text-sm font-black text-white italic uppercase tracking-tight">
-                  {t("callHistory")}
+                  Call History
                 </h4>
               </div>
               <Badge
@@ -176,7 +174,7 @@ export function GameView({
               {calledNumbers.length === 0 && (
                 <div className="w-full text-center py-4">
                   <p className="text-xs text-white/20 font-bold uppercase tracking-widest italic italic">
-                    {t("waitingCalls")}
+                    Waiting for calls
                   </p>
                 </div>
               )}
@@ -197,10 +195,10 @@ export function GameView({
                 </div>
                 <div className="relative z-10">
                   <div className="font-black text-accent uppercase text-[10px] tracking-[0.2em] mb-1">
-                    {t("victorySequence")}
+                    Victory Sequence
                   </div>
                   <div className="text-sm font-black text-white italic tracking-tight">
-                    {t("hitsBingo", { count: winners.length })}
+                    {winners.length} hits bingo
                   </div>
                 </div>
               </motion.div>
@@ -233,7 +231,7 @@ export function GameView({
             className="text-white/30 hover:text-white/60 hover:bg-white/5 rounded-2xl px-8 transition-colors text-[10px] font-black uppercase tracking-[0.3em]"
             onClick={resetGame}
           >
-            <RefreshCcw size={14} className="mr-2" /> {t("abort")}
+            <RefreshCcw size={14} className="mr-2" /> Abort
           </Button>
         </div>
       </div>

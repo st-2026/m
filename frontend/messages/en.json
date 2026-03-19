@@ -1,0 +1,1255 @@
+{
+  "common": {
+    "currency": "ETB"
+  },
+  "brand": {
+    "namePrefix": "Bingo",
+    "nameSuffix": "Master"
+  },
+  "nav": {
+    "lobby": "Lobby"
+  },
+  "profile": {
+    "myProfile": "My Profile",
+    "wallet": "Wallet",
+    "settings": "Settings",
+    "logout": "Log Out",
+    "stats": {
+      "levelShort": "Lvl {level}",
+      "wins": "{count} Wins"
+    }
+  },
+  "auth": {
+    "loading": "Loading...",
+    "startBotTitle": "Start the bot to continue",
+    "startBotDesc": "We need you to start the bot once so we can send updates and rewards.",
+    "openBot": "Open bot",
+    "started": "I've started",
+    "checking": "Checking...",
+    "openingTelegram": "Opening Telegram..."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your game preferences and account",
+    "sections": {
+      "audio": {
+        "title": "Audio & Haptics",
+        "soundEffects": {
+          "label": "Sound Effects",
+          "desc": "Play sounds for bingo calls and wins"
+        },
+        "backgroundMusic": {
+          "label": "Background Music",
+          "desc": "Ambient music during gameplay"
+        },
+        "haptics": {
+          "label": "Haptic Feedback",
+          "desc": "Vibrate on interactions",
+          "bonus": "Bonus"
+        }
+      },
+      "notifications": {
+        "title": "Notifications",
+        "gameInvites": {
+          "label": "Game Invites",
+          "desc": "Allow friends to invite you"
+        },
+        "push": {
+          "label": "Push Notifications",
+          "desc": "Get notified about tournament starts"
+        }
+      }
+    },
+    "language": {
+      "title": "Language",
+      "label": "App Language",
+      "desc": "Choose your preferred language",
+      "placeholder": "Select language",
+      "options": {
+        "en": "English",
+        "am": "Amharic"
+      }
+    },
+    "theme": {
+      "placeholder": "Select theme"
+    },
+    "account": {
+      "title": "Account Zone",
+      "logout": {
+        "label": "Log Out",
+        "desc": "Sign out of your account"
+      },
+      "delete": {
+        "label": "Delete Account",
+        "desc": "Permanently remove all data"
+      }
+    },
+    "buildInfo": "BingoMaster v{version} • Build {build}",
+    "logoutFailed": "Logout failed, but clearing local session"
+  },
+  "gameResult": {
+    "title": {
+      "winSelf": "Bingo Victory!",
+      "winOther": "{name} Won!",
+      "draw": "Game Drawn",
+      "lost": "{name} Won"
+    },
+    "boardLabel": "Board #{number}",
+    "free": "FREE",
+    "consolation": "Better luck next time! Keep playing to win the next round.",
+    "cta": {
+      "continue": "Continue Playing",
+      "playAgain": "Play Again",
+      "exit": "Exit"
+    },
+    "footer": {
+      "win": "Amazing win! Your reward has been added to your balance.",
+      "other": "Every game brings you closer to your next big win!"
+    }
+  },
+  "liveResult": {
+    "winRibbon": "You Won",
+    "winTitleSelf": "You Won the game!",
+    "winTitleOther": "{name} Won the game!",
+    "lostRibbon": "So Close!",
+    "boardLabel": "Your Board {number}",
+    "playerFallback": "Player",
+    "winnerAnnouncement": "{winner} won this round!",
+    "congratulations": "Congratulation You Won!",
+    "almostThere": "You were close!",
+    "encouragement": "Every round is a fresh chance to win big ",
+    "playAgain": "Try Again",
+    "goHome": "Back to Rooms"
+  },
+  "liveGame": {
+    "you": "You",
+    "player": "Player",
+    "loading": "Loading...",
+    "checking": "Checking...",
+    "bingoButton": "Bingo!",
+    "blocked": "Blocked",
+    "leave": "Leave Game",
+    "back": "Back to Rooms",
+    "boardLabel": "Board #{number}",
+    "status": {
+      "live": "Live ",
+      "waiting": "Waiting "
+    },
+    "stats": {
+      "earn": "Earn",
+      "entryFee": "Price",
+      "ballsOut": "Called",
+      "target": "Target"
+    },
+    "toast": {
+      "win": "Congratulations, you won!",
+      "lost": "You lost this round",
+      "bingo": "BINGO!",
+      "blocked": "You are blocked from this game",
+      "reachedMax": "You have reached the maximum bingo attempts. You are blocked from the game.",
+      "keepPlaying": {
+        "title": "Not bingo yet! Keep trying.",
+        "desc": "Attempts left: {attempts}"
+      }
+    },
+    "info": {
+      "attemptLeft": "Bingo Attempts left: {attempts}"
+    },
+    "errors": {
+      "invalidMark": "Invalid mark attempt",
+      "checkFailed": "Failed to check Bingo status"
+    }
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Sign in to continue playing",
+    "fields": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      }
+    },
+    "cta": {
+      "loading": "Logging in...",
+      "submit": "Login"
+    },
+    "footer": {
+      "text": "Don't have an account?",
+      "link": "Sign up"
+    },
+    "errors": {
+      "failed": "Login failed: {error}",
+      "unknown": "Unknown error",
+      "failedShort": "Login failed"
+    }
+  },
+  "signup": {
+    "title": "Create Account",
+    "subtitle": "Join the bingo community today",
+    "fields": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Create a password"
+      }
+    },
+    "cta": {
+      "loading": "Creating account...",
+      "submit": "Sign Up"
+    },
+    "footer": {
+      "text": "Already have an account?",
+      "link": "Sign in"
+    },
+    "errors": {
+      "failed": "Signup failed: {error}",
+      "unknown": "Unknown error",
+      "failedShort": "Signup failed"
+    },
+    "toast": {
+      "success": "Account created successfully!"
+    }
+  },
+  "mobileHeader": {
+    "greeting": "Hello, {name}!",
+    "guest": "Guest",
+    "subtitle": "Welcome back to Mella",
+    "deposit": "Deposit",
+    "promoAvailable": "Deposit Bonus Promo ",
+    "promoHint": "Tap a promo to see details",
+    "promoLiveLabel": "Live",
+    "promoDetailsTitle": "Promo Details",
+    "promoDetailsDesc": "Use this code on your next approved deposit to get the bonus.",
+    "promoCode": "Promo Code",
+    "bonusType": "Bonus Type",
+    "bonusValue": "Bonus Value",
+    "minimumDeposit": "Minimum Deposit",
+    "maximumBonusCap": "Maximum Bonus",
+    "usage": "Usage",
+    "startsIn": "Starts In ",
+    "startsInLabel": "Starts in",
+    "minutesLeft": "{count} min left to start",
+    "hoursLeft": "{count} hr left to start",
+    "daysLeft": "{count} day left to start",
+    "liveNow": "Live now",
+    "startDate": "Starts At",
+    "expiry": "Expiry",
+    "noExpiry": "No expiry",
+    "fixedBonus": "fixed bonus",
+    "upTo": "up to",
+    "swipe": "Swipe",
+    "copyPromo": "Copy",
+    "copied": "Copied"
+  },
+  "balanceCard": {
+    "balanceLabel": "Balance",
+    "bonusLabel": "Bonus",
+    "bonusValue": "{amount} ETB"
+  },
+  "gameCard": {
+    "playNow": "Play now",
+    "insufficient": "Insufficient Balance"
+  },
+  "inviteModal": {
+    "title": "Invite Friends",
+    "subtitle": "Share your link and earn 50 coins for every friend who joins!",
+    "generating": "Generating...",
+    "shareButton": "Share in Telegram",
+    "shareText": "Join me at Mella Bingo and win real rewards!",
+    "miniAppHint": "This link opens the Mini App directly with your invite code attached.",
+    "fallbackHelper": "If that fails, share the classic bot link instead.",
+    "fallbackButton": "Copy bot link",
+    "copied": {
+      "title": "Link Copied!",
+      "desc": "You can now share it with your friends."
+    }
+  },
+  "rooms": {
+    "backgroundWord": "BINGO",
+    "instructions": "Instructions",
+    "invite": "Invite friends & earn rewards",
+    "availableRooms": "Available Rooms",
+    "empty": "No Rooms Available"
+  },
+  "roomSelect": {
+    "loading": "Loading...",
+    "title": "Choose board",
+    "joining": "Joining...",
+    "join": "Join",
+    "joinedBoard": "Joined board #{number}",
+    "seconds": "{value}s",
+    "stats": {
+      "earn": "Earn",
+      "stake": "Stake",
+      "startsIn": "Starts in"
+    },
+    "currency": {
+      "birr": "Birr"
+    },
+    "errors": {
+      "joinFailed": "Failed to join board"
+    }
+  },
+  "roomFull": {
+    "loading": "Loading Room Status...",
+    "title": "Room is Full!",
+    "subtitle": "Please wait or try another room",
+    "derash": "DERASH",
+    "recentCalls": "RECENT CALLS",
+    "waitingCalls": "Waiting for calls...",
+    "seconds": "s",
+    "retrying": "Retrying automatically...",
+    "toast": {
+      "stillFull": "Room is still full"
+    },
+    "cta": {
+      "retry": "Retry Now",
+      "tryOther": "Try Other Rooms"
+    }
+  },
+  "profilePage": {
+    "badge": {
+      "pro": "PRO PLAYER"
+    },
+    "actions": {
+      "editInfo": "Edit Info"
+    },
+    "progress": {
+      "growth": "Growth",
+      "level": "Level Progress",
+      "next": "{amount} Birr needed for Level {level}"
+    },
+    "stats": {
+      "wins": "Wins",
+      "rate": "Rate"
+    },
+    "currency": {
+      "birr": "Birr"
+    },
+    "recent": {
+      "title": "Recent Games",
+      "viewAll": "View All",
+      "victory": "Victory",
+      "defeat": "Defeat",
+      "amount": "{sign}{amount} Birr"
+    },
+    "achievements": {
+      "title": "Achievements",
+      "locked": "Locked",
+      "firstBlood": {
+        "name": "First Blood",
+        "desc": "Won your first game"
+      },
+      "highRoller": {
+        "name": "High Roller",
+        "desc": "Played 50 games"
+      },
+      "sharpshooter": {
+        "name": "Sharpshooter",
+        "desc": "Winning board < 5 mins"
+      }
+    }
+  },
+  "wallet": {
+    "errors": {
+      "invalidAmount": "Please enter a valid amount",
+      "transactionFailed": "Transaction failed"
+    },
+    "toast": {
+      "depositSuccess": "Deposit successful!",
+      "withdrawSuccess": "Withdrawal successful!"
+    },
+    "today": "Today",
+    "balance": {
+      "title": "Total Balance",
+      "deposit": "Deposit",
+      "withdraw": "Withdraw"
+    },
+    "amountPlaceholder": "Enter amount",
+    "deposit": {
+      "title": "Top Up Balance",
+      "subtitle": "Enter amount to deposit.",
+      "processing": "Processing...",
+      "confirm": "Confirm Deposit"
+    },
+    "withdraw": {
+      "title": "Withdraw Funds",
+      "subtitle": "Enter amount to withdraw.",
+      "processing": "Confirming...",
+      "confirm": "Confirm Withdrawal"
+    },
+    "transactions": {
+      "title": "Recent Transaction",
+      "tabs": {
+        "all": "All",
+        "in": "In",
+        "out": "Out"
+      },
+      "loading": "Loading wallet data...",
+      "empty": "No transactions found"
+    },
+    "transaction": {
+      "deposit": "Deposit",
+      "withdrawal": "Withdrawal",
+      "gameWin": "Game Win",
+      "gameLost": "Game Lost",
+      "referralReward": "Referral Reward",
+      "referralCommission": "Referral Commission",
+      "welcomeBonus": "Welcome Bonus",
+      "default": "Transaction",
+      "gameFee": "Game Fee",
+      "bonus": "Bonus"
+    },
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "failed": "Failed",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    }
+  },
+  "withdraw": {
+    "balanceLabel": "Available Balance",
+    "gamesPlayed": "{played} / {required} games played",
+    "eligible": "Eligible",
+    "notEligibleTitle": "Not eligible yet",
+    "notEligibleDesc": "Play {count} more {count, plural, one {game} other {games}} to unlock withdrawals.",
+    "depositNotEligibleTitle": "Deposit required",
+    "depositNotEligibleDesc": "Deposit {amount} more ETB to unlock withdrawals.",
+    "balanceNotEligibleTitle": "Balance too low",
+    "balanceNotEligibleDesc": "Your balance must allow a minimum withdrawal of {minWithdraw} ETB while keeping {minLeft} ETB.",
+    "hasPendingTitle": "Pending request",
+    "hasPendingDesc": "You already have a pending withdrawal. Wait for it to be processed.",
+    "rulesTitle": "Withdrawal rules",
+    "rulesSubtitle": "These rules must be met before requesting a withdrawal.",
+    "rules": {
+      "minGames": "Play at least {count} games",
+      "minDeposit": "Total deposits at least {amount} ETB",
+      "minWithdraw": "Minimum withdrawal {amount} ETB",
+      "minLeft": "Keep at least {amount} ETB after withdrawal"
+    },
+    "formTitle": "Request Withdrawal",
+    "formSubtitle": "Enter the amount and your phone number to receive funds",
+    "amountLabel": "Amount",
+    "phoneLabel": "Phone Number",
+    "submit": "Request Withdrawal",
+    "submitting": "Submitting...",
+    "success": "Withdrawal request submitted!",
+    "error": "Failed to submit withdrawal",
+    "processedNote": "Withdrawals are processed within 24 hours. You will receive funds to the phone number provided.",
+    "recentRequests": "Recent Requests",
+    "noRequests": "No withdrawal requests yet",
+    "toast": {
+      "hasPending": "You already have a pending withdrawal.",
+      "needGames": "Play {count} more games to withdraw.",
+      "needDeposit": "Deposit {amount} more ETB to withdraw.",
+      "balanceTooLow": "Your balance is too low to withdraw. Minimum withdrawal is {minWithdraw} ETB and you must keep {minLeft} ETB."
+    },
+    "serverErrors": {
+      "minWithdrawalAmount": "Minimum withdrawal is {min} ETB.",
+      "minDepositRequired": "You must deposit at least {min} ETB before withdrawing.",
+      "minGamesRequired": "You must play at least {min} games before withdrawing.",
+      "minAccountLeft": "You must keep at least {min} ETB in your wallet after withdrawing.",
+      "pendingWithdrawal": "You already have a pending withdrawal request."
+    },
+    "validation": {
+      "amountRequired": "Amount is required",
+      "amountPositive": "Amount must be positive",
+      "amountMin": "Minimum withdrawal is {min} ETB",
+      "amountLimit": "Amount exceeds your balance",
+      "amountMinLeft": "You must keep at least {min} ETB after withdrawal",
+      "phoneRequired": "Phone is required",
+      "phoneInvalid": "Use 09xxxxxxxx or +2519xxxxxxxx"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    }
+  },
+  "depositForm": {
+    "title": "Deposit",
+    "subtitle": "Paste the SMS payment confirmation below.",
+    "channels": {
+      "telebirr": "Telebirr",
+      "cbe": "CBE Birr"
+    },
+    "account": {
+      "ownerLabel": "Account Owner",
+      "owner": "Tadele Workie",
+      "numberLabel": "Account Number",
+      "copy": "Copy account"
+    },
+    "amount": {
+      "label": "Amount",
+      "placeholder": "0.00",
+      "currency": "ETB"
+    },
+    "promo": {
+      "label": "Promo code (optional)",
+      "placeholder": "Enter promo code",
+      "hint": "If valid and started, bonus will be applied when this deposit is approved."
+    },
+    "sms": {
+      "label": "Payment message (SMS)",
+      "placeholder": "Paste the CBE or Telebirr confirmation message here..."
+    },
+    "cta": {
+      "loading": "Submitting...",
+      "submit": "Submit payment confirmation"
+    },
+    "notice": "Please paste the full bank confirmation SMS after sending. This helps verify your payment faster.",
+    "errors": {
+      "amountRequired": "Amount is required",
+      "minimumDeposit": "Minimum deposit is 1",
+      "promoTooLong": "Promo code is too long",
+      "smsRequired": "Please paste the full SMS content",
+      "approveFailed": "Failed to approve deposit.",
+      "invalidSms": "Invalid SMS content. Please try again.",
+      "submitFailed": "Failed to submit deposit.",
+      "network": "Network error. Please try again."
+    },
+    "toast": {
+      "approved": "Deposit approved! Amount: {amount}",
+      "submitted": "Deposit submitted!"
+    }
+  },
+  "depositHeader": {
+    "title": "Deposit accounts"
+  },
+  "depositGuide": {
+    "title": "How to deposit",
+    "imageAlt": "Deposit demo",
+    "steps": {
+      "deposit": {
+        "title": "Deposit",
+        "desc": "Go to the Telebirr app and send money to one of the available account."
+      },
+      "confirmation": {
+        "title": "Confirmation",
+        "desc": "After completing the transfer, copy the SMS confirmation message."
+      },
+      "paste": {
+        "title": "Paste",
+        "desc": "Paste the SMS message in the form above."
+      }
+    }
+  },
+  "depositSupport": {
+    "title": "Contact support",
+    "subtitle": "For more information contact our support"
+  },
+  "bottomNav": {
+    "play": "Play",
+    "wallet": "Wallet",
+    "history": "History",
+    "profile": "Profile",
+    "settings": "Settings",
+    "admin": {
+      "rooms": "Rooms",
+      "users": "Users",
+      "posts": "Posts",
+      "manage": "Manage",
+      "scheduled": "Scheduled",
+      "analytics": "Analytics",
+      "bonuses": "Bonuses",
+      "withdrawals": "Withdrawals",
+      "back": "Back"
+    },
+    "agent": {
+      "more": "More"
+    }
+  },
+  "insufficientBalance": {
+    "badge": "Balance Alert",
+    "title": "Insufficient Balance",
+    "subtitle": "Your current balance is not enough to proceed with this room.",
+    "description": "Please make a deposit to continue playing and enjoying our games.",
+    "status": {
+      "label": "Status",
+      "value": "Top-up required",
+      "hint": "Add funds to reserve this board and keep the session alive."
+    },
+    "cta": {
+      "home": "Go Home",
+      "deposit": "Make Deposit"
+    },
+    "footer": "Secure payments powered by Mella"
+  },
+  "lobbyView": {
+    "badge": "Choose Your Destiny",
+    "title": "GAME LOBBY",
+    "playersReady": "Players Ready",
+    "startingIn": "Starting in {seconds}s",
+    "status": {
+      "taken": "Taken",
+      "open": "Open"
+    }
+  },
+  "gameView": {
+    "ready": "Ready",
+    "liveBroadcast": "Live Broadcast",
+    "sessionStandby": "Session Standby",
+    "start": "START ENGINE",
+    "queue": "Queue",
+    "callHistory": "Call History",
+    "waitingCalls": "Waiting for calls...",
+    "victorySequence": "Victory Sequence",
+    "hitsBingo": "{count} HIT BINGO",
+    "abort": "Abort Session"
+  },
+  "rejoinBanner": {
+    "status": {
+      "live": "Live Game in Progress",
+      "starting": "Game Starting Soon",
+      "blocked": "Game Blocked"
+    },
+    "roomFallback": "Bingo Room",
+    "actionLabel": "Action",
+    "action": "Rejoin Now"
+  },
+  "agentEarnings": {
+    "title": "Earnings",
+    "subtitle": "Analyze your commission trends."
+  },
+  "agentReferrals": {
+    "title": "My Referrals",
+    "subtitle": "Track users you have invited to the game."
+  },
+  "agentStats": {
+    "title": "Overview",
+    "subtitle": "Your marketing performance at a glance."
+  },
+  "agentNav": {
+    "overview": "Overview",
+    "referrals": "Referrals",
+    "earnings": "Earnings",
+    "back": "Back"
+  },
+  "agentOverview": {
+    "totalReferrals": {
+      "title": "Total Referrals",
+      "desc": "{count} active users"
+    },
+    "totalEarnings": {
+      "title": "Total Earnings",
+      "desc": "Lifetime commission"
+    },
+    "pending": {
+      "title": "Pending",
+      "desc": "Available soon"
+    },
+    "withdrawn": {
+      "title": "Withdrawn",
+      "desc": "Successfully paid"
+    },
+    "currency": {
+      "birr": "Birr"
+    }
+  },
+  "referralChart": {
+    "overviewTitle": "Earnings Overview",
+    "performanceTitle": "Earnings Performance",
+    "empty": "No earning data available yet.",
+    "emptyAction": "Start referring!",
+    "currencySymbol": "ETB ",
+    "commissionLabel": "Commission"
+  },
+  "referralLink": {
+    "title": "Your Referral Link",
+    "copied": "Referral link copied to clipboard!",
+    "shareText": "Join me on Bingo and win big!",
+    "footer": "Earn 5% commission every time your friends win!"
+  },
+  "referralTable": {
+    "headers": {
+      "user": "User",
+      "joined": "Joined",
+      "games": "Games",
+      "wins": "Wins",
+      "status": "Status",
+      "commission": "Commission"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "currencySymbol": "ETB ",
+    "empty": "No referrals found.",
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "page": "Page {page}"
+    }
+  },
+  "admin": {
+    "nav": {
+      "posts": "Posts",
+      "scheduled": "Scheduled",
+      "analytics": "Analytics",
+      "bonuses": "Bonuses",
+      "withdrawals": "Withdrawals",
+      "transactions": "Transactions",
+      "gameConfig": "Config",
+      "back": "Back"
+    },
+    "withdrawals": {
+      "title": "Withdrawals",
+      "totalRequests": "{count} total requests",
+      "searchPlaceholder": "Search by name, phone, or ID...",
+      "noWithdrawals": "No withdrawals found",
+      "tryDifferentSearch": "Try a different search",
+      "noStatusRequests": "No {status} requests",
+      "amount": "Amount",
+      "userBalance": "Bal: {amount} ETB",
+      "actions": {
+        "approve": "Approve",
+        "reject": "Reject",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "approving": "Approving...",
+        "rejecting": "Rejecting..."
+      },
+      "confirmApprove": "Approve {amount} ETB withdrawal?",
+      "confirmReject": "Reject this withdrawal?",
+      "reasonPlaceholder": "Reason (optional)",
+      "rejectionReasonLabel": "Reason: {reason}",
+      "toast": {
+        "approved": "Withdrawal approved ✓",
+        "rejected": "Withdrawal rejected",
+        "approveFailed": "Failed to approve",
+        "rejectFailed": "Failed to reject"
+      },
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "all": "All"
+      }
+    },
+    "deliveryLog": {
+      "title": "Delivery Log",
+      "subtitle": "{total} total deliveries",
+      "empty": {
+        "title": "No deliveries yet",
+        "subtitle": "Send a post to see delivery logs here."
+      },
+      "untitled": "Untitled",
+      "chat": "Chat: {chatId}",
+      "pagination": "Page {page} of {totalPages}"
+    },
+    "posts": {
+      "title": "Posts",
+      "subtitle": "Manage announcements for your Telegram users",
+      "actions": {
+        "newPost": "New Post",
+        "createPost": "Create Post"
+      },
+      "empty": {
+        "title": "No posts yet",
+        "subtitle": "Create your first announcement to reach your users."
+      },
+      "menu": {
+        "view": "View",
+        "edit": "Edit",
+        "send": "Send",
+        "delete": "Delete"
+      },
+      "toast": {
+        "deleted": "Post deleted",
+        "deleteFailed": "Failed to delete post",
+        "published": "Published to channel (#{id})",
+        "queued": "Broadcast queued!",
+        "queueFailed": "Failed to queue broadcast"
+      }
+    },
+    "scheduled": {
+      "title": "Scheduled Posts",
+      "subtitle": "Posts queued for automatic delivery",
+      "empty": {
+        "title": "No scheduled posts",
+        "subtitle": "Schedule a post to have it sent automatically at a specific time."
+      },
+      "actions": {
+        "createPost": "Create Post"
+      }
+    },
+    "createPost": {
+      "title": "New Post",
+      "subtitle": "Create an announcement for your users",
+      "toast": {
+        "created": "Post created successfully",
+        "failed": "Failed to create post"
+      }
+    },
+    "editPost": {
+      "title": "Edit Post",
+      "subtitle": "Update your announcement",
+      "toast": {
+        "updated": "Post updated",
+        "failed": "Failed to update post"
+      },
+      "notFound": "Post not found"
+    },
+    "postDetail": {
+      "notFound": "Post not found",
+      "actions": {
+        "backToPosts": "Back to Posts",
+        "edit": "Edit",
+        "send": "Send"
+      },
+      "tabs": {
+        "overview": "Overview",
+        "recipients": "Recipients"
+      },
+      "analytics": {
+        "title": "Delivery Analytics",
+        "deliveryRate": "Delivery Rate",
+        "recipients": "Recipients",
+        "sent": "Sent",
+        "failed": "Failed",
+        "pending": "Pending"
+      },
+      "preview": {
+        "title": "Message Preview"
+      },
+      "details": {
+        "title": "Details",
+        "format": "Format",
+        "images": "Images",
+        "buttons": "Buttons",
+        "scheduled": "Scheduled",
+        "sent": "Sent",
+        "created": "Created"
+      },
+      "recentDeliveries": {
+        "title": "Recent Deliveries",
+        "viewAll": "View All"
+      },
+      "toast": {
+        "published": "Published to channel (#{id})",
+        "queued": "Broadcast queued!",
+        "queueFailed": "Failed to queue broadcast"
+      }
+    },
+    "bonuses": {
+      "title": "Bonuses",
+      "subtitle": "Manage welcome and admin bonuses",
+      "welcome": {
+        "title": "Welcome Bonus",
+        "description": "Applied automatically when new users register.",
+        "amountLabel": "Welcome amount",
+        "amountPlaceholder": "Enter welcome bonus",
+        "messageLabel": "Welcome message",
+        "messagePlaceholder": "Default message for new users",
+        "messageHint": "Supports {name} and {amount} placeholders."
+      },
+      "bonus": {
+        "title": "Admin Bonus",
+        "description": "Grant a one-time bonus to a user or everyone.",
+        "amountLabel": "Default bonus amount",
+        "amountPlaceholder": "Enter bonus amount",
+        "messageLabel": "Bonus message",
+        "messagePlaceholder": "Default message when granting bonuses",
+        "messageHint": "Supports {name} and {amount} placeholders.",
+        "grantAll": "Grant to all users",
+        "grantAllHint": "Applies to {count} users",
+        "userSearch": "Find user",
+        "userSearchPlaceholder": "Search by name, username, or email",
+        "userSelect": "Select user",
+        "userSelectPlaceholder": "Choose users",
+        "userSelected": "Selected {count} users",
+        "grantAmountLabel": "Grant amount",
+        "grantAmountPlaceholder": "Optional override amount",
+        "grantAmountHint": "Leave blank to use the default bonus amount.",
+        "grantMessageLabel": "Bonus message",
+        "grantMessagePlaceholder": "Optional message sent to users",
+        "grantMessageHint": "Shown in Telegram and the wallet transaction."
+      },
+      "actions": {
+        "save": "Save settings",
+        "saveWelcome": "Save welcome bonus",
+        "saveBonus": "Save admin bonus",
+        "saving": "Saving...",
+        "grant": "Grant bonus",
+        "granting": "Granting..."
+      },
+      "tabs": {
+        "welcome": "Welcome Bonus",
+        "bonus": "Admin Bonus",
+        "grant": "Grant Bonus"
+      },
+      "fields": {
+        "active": "Active",
+        "activeHint": "Disable to pause this bonus without deleting it.",
+        "description": "Description",
+        "descriptionPlaceholder": "Short note shown in admin"
+      },
+      "toast": {
+        "settingsSaved": "Bonus settings updated",
+        "settingsFailed": "Failed to update bonus settings",
+        "welcomeSaved": "Welcome bonus updated",
+        "welcomeFailed": "Failed to update welcome bonus",
+        "bonusSaved": "Admin bonus updated",
+        "bonusFailed": "Failed to update admin bonus",
+        "grantedAll": "Bonus granted to all users",
+        "grantedOne": "Bonus granted",
+        "grantFailed": "Failed to grant bonus"
+      },
+      "errors": {
+        "selectUsers": "Please select at least one user"
+      }
+    },
+    "postFilters": {
+      "searchPlaceholder": "Search posts...",
+      "status": {
+        "all": "All",
+        "draft": "Draft",
+        "scheduled": "Scheduled",
+        "sending": "Sending",
+        "sent": "Sent",
+        "failed": "Failed"
+      }
+    },
+    "postEditor": {
+      "channel": {
+        "defaultName": "Official Channel",
+        "preview": "Channel Preview"
+      },
+      "errors": {
+        "missingFields": {
+          "title": "Missing fields",
+          "description": "Title and content are required."
+        },
+        "missingCategory": {
+          "title": "Missing category",
+          "description": "Category is required for channel posts."
+        },
+        "tooManyImages": {
+          "title": "Too many images",
+          "description": "Channel posts support a single image only."
+        },
+        "saveFailed": {
+          "title": "Failed to save post",
+          "unknown": "Unknown error"
+        }
+      },
+      "toast": {
+        "saved": "Post saved"
+      },
+      "target": {
+        "label": "Target",
+        "users": "Users",
+        "channel": "Official Channel"
+      },
+      "category": {
+        "label": "Category",
+        "placeholder": "Select category"
+      },
+      "title": {
+        "label": "Title",
+        "placeholder": "New feature, promo, or announcement title"
+      },
+      "content": {
+        "label": "Content",
+        "format": {
+          "markdown": "Markdown",
+          "html": "HTML"
+        },
+        "placeholderMarkdown": "Use **bold**, _italic_, and links like [Open game](https://...)",
+        "placeholderHtml": "Use basic HTML tags supported by Telegram (b, i, a, etc.)"
+      },
+      "buttons": {
+        "label": "Buttons",
+        "addRow": "+ Row",
+        "textPlaceholder": "Button text",
+        "urlPlaceholder": "https:// or leave empty for callback",
+        "addButton": "+ Button",
+        "removeButton": "Remove",
+        "removeRow": "Remove Row",
+        "emptyHint": "Add one or more rows of inline buttons. Each row can contain one or more buttons."
+      },
+      "actions": {
+        "saving": "Saving...",
+        "save": "Save Post"
+      },
+      "previewLabel": "Telegram preview"
+    },
+    "postTable": {
+      "empty": "No posts yet. Create your first announcement.",
+      "headers": {
+        "title": "Title",
+        "status": "Status",
+        "scheduled": "Scheduled",
+        "updated": "Updated",
+        "actions": "Actions"
+      },
+      "status": {
+        "sent": "Sent",
+        "failed": "Failed",
+        "scheduled": "Scheduled",
+        "sending": "Sending",
+        "draft": "Draft",
+        "pending": "Pending"
+      },
+      "dash": "—",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "send": "Send"
+      }
+    },
+    "recipients": {
+      "toast": {
+        "queued": "Deletion job queued",
+        "failed": "Failed to start deletion"
+      },
+      "filters": {
+        "search": "Search username",
+        "statusPlaceholder": "Deletion Status",
+        "status": {
+          "all": "All Statuses",
+          "success": "Deleted",
+          "failed": "Failed",
+          "pending": "Pending"
+        },
+        "apply": "Apply"
+      },
+      "actions": {
+        "deleteSelected": "Delete Selected",
+        "deleteAll": "Delete All",
+        "deleteRange": "Delete Date Range",
+        "prev": "Prev",
+        "next": "Next",
+        "cancel": "Cancel",
+        "deleting": "Deleting...",
+        "confirm": "Confirm"
+      },
+      "progress": {
+        "title": "Deletion Progress",
+        "counts": "{success} success / {failed} failed",
+        "deleting": "Deleting {done} / {total}",
+        "cancel": "Cancel Deletion"
+      },
+      "table": {
+        "user": "User",
+        "telegram": "Telegram",
+        "delivered": "Delivered",
+        "deletionStatus": "Deletion Status",
+        "unknown": "Unknown",
+        "dash": "—"
+      },
+      "empty": {
+        "loading": "Loading recipients...",
+        "none": "No recipients found."
+      },
+      "pagination": "Page {page} of {total}",
+      "confirm": {
+        "description": "This will delete messages from Telegram chats only. Records will remain in the database."
+      }
+    },
+    "schedulePicker": {
+      "label": "Schedule (optional)",
+      "immediate": "Send immediately"
+    },
+    "telegramPreview": {
+      "botName": "Bingo Bot",
+      "botLabel": "bot",
+      "preview": "Preview",
+      "imageAlt": "preview"
+    },
+    "imageUploader": {
+      "title": "Images (URLs)",
+      "urlPlaceholder": "https://...",
+      "actions": {
+        "add": "Add",
+        "uploading": "Uploading...",
+        "upload": "Upload"
+      },
+      "previewAlt": "preview",
+      "hint": "You can paste a public image URL or upload an image, which will be hosted by the backend and used in the Telegram post."
+    },
+    "confirmSend": {
+      "title": {
+        "channel": "Publish to channel?",
+        "users": "Broadcast this post?"
+      },
+      "description": {
+        "channel": "This will publish the post to the official Telegram channel. Messages cannot be unsent once delivered.",
+        "users": "This will queue the post for delivery to all eligible Telegram users. Messages cannot be unsent once delivered."
+      },
+      "warning": {
+        "channel": "Publishing happens instantly and records the Telegram message ID for tracking.",
+        "users": "The broadcast will be processed in batches with retry logic. You can track progress in real-time."
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "sendNow": "Send Now"
+      }
+    },
+    "broadcastProgress": {
+      "status": {
+        "broadcasting": "Broadcasting...",
+        "complete": "Broadcast Complete",
+        "completeWithFailures": "Broadcast Complete (with failures)",
+        "status": "Broadcast Status"
+      },
+      "progress": {
+        "label": "Progress"
+      },
+      "stats": {
+        "sent": "Sent",
+        "failed": "Failed",
+        "pending": "Pending"
+      },
+      "total": {
+        "label": "Total recipients"
+      }
+    },
+    "deliveryStatus": {
+      "pending": "Pending",
+      "sent": "Sent",
+      "failed": "Failed",
+      "draft": "Draft",
+      "scheduled": "Scheduled",
+      "sending": "Sending"
+    },
+    "rooms": {
+      "title": "Rooms",
+      "subtitle": "Manage game rooms for players.",
+      "actions": {
+        "newRoom": "New Room",
+        "cancel": "Cancel",
+        "deleting": "...",
+        "delete": "Delete"
+      },
+      "empty": {
+        "title": "No rooms found",
+        "subtitle": "Create your first room to start hosting games!"
+      },
+      "fallbackDescription": "Exciting Bingo Game",
+      "playersShort": "{min}-{max} PL",
+      "status": {
+        "active": "Active"
+      },
+      "confirmDelete": {
+        "title": "Delete Room?",
+        "description": "This will permanently remove the room. This action cannot be undone."
+      },
+      "toast": {
+        "deleted": "Room deleted successfully",
+        "deleteFailed": "Failed to delete room"
+      }
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Management Center",
+      "searchPlaceholder": "Search users...",
+      "empty": "No users found",
+      "table": {
+        "user": "User",
+        "role": "Role",
+        "balance": "Balance",
+        "actions": "Actions",
+        "noUsername": "no-username"
+      },
+      "actions": {
+        "details": "Details",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "deleting": "..."
+      },
+      "confirmDelete": {
+        "title": "Delete User?",
+        "description": "This will permanently remove the user and all their data. This action cannot be undone."
+      },
+      "toast": {
+        "deleted": "User deleted successfully",
+        "deleteFailed": "Failed to delete user"
+      },
+      "fallback": {
+        "initial": "?"
+      }
+    },
+    "userDetail": {
+      "notFound": "User Not Found",
+      "actions": {
+        "backToUsers": "Back to Users",
+        "cancel": "Cancel"
+      },
+      "stats": {
+        "balance": "Balance",
+        "referrals": "Referrals",
+        "users": "Users"
+      },
+      "currency": "ETB",
+      "role": {
+        "title": "Manage Role",
+        "confirmTitle": "Confirm Role Change",
+        "confirmDescription": "Set {user}@{username}{/user} to {strong}{role}{/strong}?",
+        "confirmAction": "Update Role",
+        "label": "{role}",
+        "option": "{role}",
+        "unknownUser": "unknown",
+        "unknownRole": "unknown"
+      },
+      "activity": {
+        "title": "Recent Activity",
+        "empty": "No transactions found",
+        "type": "{type}"
+      },
+      "referrals": {
+        "title": "Referrals",
+        "empty": "No referrals yet",
+        "joined": "Joined {date}",
+        "active": "Active",
+        "unknownUser": "unknown"
+      },
+      "fallback": {
+        "initial": "?",
+        "noUsername": "no-username"
+      },
+      "toast": {
+        "roleUpdated": "Role updated to {role}",
+        "roleUpdateFailed": "Failed to update role"
+      }
+    }
+  },
+  "bingoBoard": {
+    "boardLabel": "Board #{number}",
+    "bingo": "BINGO",
+    "free": "Free"
+  },
+  "transactions": {
+    "title": "Transaction History",
+    "subtitle": "View your past transactions here",
+    "tabs": {
+      "all": "All",
+      "in": "In",
+      "out": "Out"
+    },
+    "empty": "No transactions found",
+    "loadingMore": "Loading more...",
+    "noMore": "No more transactions",
+    "types": {
+      "deposit": "Deposit",
+      "withdrawal": "Withdrawal",
+      "game_win": "Game Win",
+      "game_lost": "Game Fee",
+      "referral_reward": "Referral Reward",
+      "welcome_bonus": "Welcome Bonus"
+    },
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "failed": "Failed"
+    }
+  }
+}

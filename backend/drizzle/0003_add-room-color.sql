@@ -1,0 +1,1 @@
+ALTER TABLE "rooms" ADD COLUMN "color" text DEFAULT 'from-blue-500 to-blue-700' NOT NULL;

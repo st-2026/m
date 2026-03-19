@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Crown,
   Flame,
   Gamepad2,
   Gem,
-  RefreshCw,
+  LayoutGrid,
   Settings,
   Sparkles,
   User,
@@ -16,16 +16,21 @@ import {
   Zap,
 } from "lucide-react";
 import type { Socket } from "socket.io-client";
+import { MobileHeader } from "@/components/mobile-header";
+import { BalanceCard } from "@/components/balance-card";
+import { GameCard } from "@/components/game-card";
 
 import {
-  fetchHomeSnapshot,
+  fetchRooms,
+  fetchWallet,
   loginLocalDev,
   signupLocalDev,
   verifyTelegramAndGetToken,
+  type RoomItem,
+  type WalletSummary,
 } from "@/lib/api";
 import { closeSocket, connectSocket } from "@/lib/socket";
 import { getTelegramInitData, initTelegramWebApp } from "@/lib/telegram";
-import type { HomeSnapshot } from "@/types/home";
 
 type LoadingState = "boot" | "ready" | "error";
 type DevAuthMode = "login" | "signup";
@@ -39,14 +44,8 @@ function tabIcon(key: string) {
   return <Settings size={18} />;
 }
 
-function roomIcon(index: number) {
-  const icons = [
-    <Crown key="crown" size={42} />,
-    <Gem key="gem" size={42} />,
-    <Sparkles key="sparkles" size={42} />,
-    <Flame key="flame" size={42} />,
-  ];
-  return icons[index % icons.length] ?? <Sparkles size={42} />;
+function centsToLabel(cents: number): string {
+  return (cents / 100).toFixed(2);
 }
 
 export function HomeScreen() {
@@ -59,7 +58,17 @@ export function HomeScreen() {
   const [devFirstName, setDevFirstName] = useState("");
   const [devReferralCode, setDevReferralCode] = useState("DEVAGENT");
   const [error, setError] = useState<string>("");
-  const [snapshot, setSnapshot] = useState<HomeSnapshot | null>(null);
+
+  const [rooms, setRooms] = useState<RoomItem[]>([]);
+  const [wallet, setWallet] = useState<WalletSummary | null>(null);
+
+  async function loadData(token: string) {
+    const [roomsData, walletData] = await Promise.all([
+      fetchRooms(token),
+      fetchWallet(token),
+    ]);
+    return { roomsData, walletData };
+  }
 
   useEffect(() => {
     let alive = true;
@@ -92,26 +101,14 @@ export function HomeScreen() {
 
         localStorage.setItem(FALLBACK_TOKEN_KEY, token);
 
-        const initial = await fetchHomeSnapshot(token);
+        const { roomsData, walletData } = await loadData(token);
         if (!alive) return;
 
-        setSnapshot(initial);
+        setRooms(roomsData);
+        setWallet(walletData);
         setState("ready");
 
         socket = connectSocket(token);
-        socket.emit("get_home");
-
-        socket.on("home_snapshot", (incoming: HomeSnapshot) => {
-          setSnapshot((prev) => {
-            if (!prev) return incoming;
-            if (incoming.version > prev.version) return incoming;
-            return prev;
-          });
-        });
-
-        socket.on("home_snapshot_failed", () => {
-          setError("Live updates paused.");
-        });
       } catch (err) {
         if (!alive) return;
         if (err instanceof Error && err.message === "missing_auth_token") {
@@ -133,28 +130,16 @@ export function HomeScreen() {
     };
   }, []);
 
-  const home = snapshot?.home;
-
-  const roomRows = useMemo(() => {
-    if (!home) return [];
-    return home.rooms;
-  }, [home]);
-
-  async function openRoom(room: {
-    roomId: string;
-    sessionId: string | null;
-    title: string;
-  }) {
-    void room.sessionId;
-    void room.title;
-    router.push(`/rooms/${room.roomId}`);
+  function openRoom(room: RoomItem) {
+    router.push(`/rooms/${room.id}`);
   }
+
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   if (state === "boot") {
     return (
-      <main className="min-h-screen bg-star-grid p-4 text-white">
-        <div className="star-noise fixed inset-0 pointer-events-none" />
-        <div className="relative mx-auto mt-40 max-w-md rounded-2xl border border-cyan-500/20 bg-[#05112a]/80 p-6 text-center shadow-glow">
+      <main className="min-h-screen bg-background p-4 text-foreground">
+        <div className="relative mx-auto mt-40 max-w-md text-center">
           <p className="text-sm uppercase tracking-[0.24em] text-cyan-200">
             Mella Bingo
           </p>
@@ -167,15 +152,15 @@ export function HomeScreen() {
   if (state === "error") {
     if (showDevAuth) {
       return (
-        <main className="min-h-screen bg-star-grid p-4 text-white">
-          <div className="relative mx-auto mt-20 max-w-md rounded-2xl border border-cyan-400/30 bg-[#05112a]/90 p-5">
+        <main className="min-h-screen bg-background p-4 text-foreground">
+          <div className="relative mx-auto mt-20 max-w-md rounded-2xl border border-cyan-400/30 bg-muted/90 p-5">
             <p className="text-xs uppercase tracking-[0.18em] text-cyan-200/90">
               Local Dev Mode
             </p>
             <h2 className="mt-2 text-2xl font-bold">
               {devAuthMode === "login" ? "Login" : "Sign Up"}
             </h2>
-            <p className="mt-1 text-sm text-cyan-100/75">
+            <p className="mt-1 text-sm text-muted-foreground">
               Use email/password to test end-to-end without Telegram bot setup.
             </p>
 
@@ -200,8 +185,9 @@ export function HomeScreen() {
                         });
 
                   localStorage.setItem(FALLBACK_TOKEN_KEY, token);
-                  const initial = await fetchHomeSnapshot(token);
-                  setSnapshot(initial);
+                  const { roomsData, walletData } = await loadData(token);
+                  setRooms(roomsData);
+                  setWallet(walletData);
                   setState("ready");
                   setShowDevAuth(false);
                 } catch {
@@ -219,7 +205,7 @@ export function HomeScreen() {
                 type="email"
                 required
                 placeholder="you@example.com"
-                className="w-full rounded-lg border border-cyan-400/30 bg-[#03112c] px-3 py-2 text-sm text-white outline-none"
+                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none"
               />
               <input
                 value={devPassword}
@@ -228,7 +214,7 @@ export function HomeScreen() {
                 required
                 minLength={6}
                 placeholder="password"
-                className="w-full rounded-lg border border-cyan-400/30 bg-[#03112c] px-3 py-2 text-sm text-white outline-none"
+                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none"
               />
               {devAuthMode === "signup" ? (
                 <>
@@ -237,7 +223,7 @@ export function HomeScreen() {
                     onChange={(e) => setDevFirstName(e.target.value)}
                     type="text"
                     placeholder="first name (optional)"
-                    className="w-full rounded-lg border border-cyan-400/30 bg-[#03112c] px-3 py-2 text-sm text-white outline-none"
+                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none"
                   />
                   <input
                     value={devReferralCode}
@@ -246,21 +232,21 @@ export function HomeScreen() {
                     }
                     type="text"
                     placeholder="referral code (e.g. DEVAGENT)"
-                    className="w-full rounded-lg border border-cyan-400/30 bg-[#03112c] px-3 py-2 text-sm text-white outline-none"
+                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none"
                   />
                 </>
               ) : null}
 
               <button
                 type="submit"
-                className="w-full rounded-lg bg-[#1d63ff] px-4 py-3 text-sm font-bold tracking-[0.1em]"
+                className="w-full rounded-lg bg-primary px-4 py-3 text-sm font-bold tracking-[0.1em] text-primary-foreground"
               >
                 {devAuthMode === "login" ? "LOGIN" : "SIGN UP"}
               </button>
             </form>
 
             <button
-              className="mt-3 text-xs text-cyan-200/85 underline"
+              className="mt-3 text-xs text-primary underline"
               onClick={() =>
                 setDevAuthMode((prev) =>
                   prev === "login" ? "signup" : "login",
@@ -273,7 +259,7 @@ export function HomeScreen() {
             </button>
 
             {error ? (
-              <p className="mt-2 text-xs text-amber-200">{error}</p>
+              <p className="mt-2 text-xs text-destructive">{error}</p>
             ) : null}
           </div>
         </main>
@@ -281,10 +267,10 @@ export function HomeScreen() {
     }
 
     return (
-      <main className="min-h-screen bg-star-grid p-4 text-white">
-        <div className="relative mx-auto mt-28 max-w-md rounded-2xl border border-red-400/30 bg-[#2a0b1a]/80 p-6">
+      <main className="min-h-screen bg-background p-4 text-foreground">
+        <div className="relative mx-auto mt-28 max-w-md rounded-2xl border border-destructive/30 bg-destructive/10 p-6">
           <p className="text-base font-semibold">Could not load home screen</p>
-          <p className="mt-2 text-sm text-red-100">
+          <p className="mt-2 text-sm text-destructive">
             {error || "Unknown error"}
           </p>
         </div>
@@ -292,131 +278,89 @@ export function HomeScreen() {
     );
   }
 
-  if (!home) {
-    return (
-      <main className="min-h-screen bg-star-grid p-4 text-white">
-        <div className="relative mx-auto mt-28 max-w-md rounded-2xl border border-red-400/30 bg-[#2a0b1a]/80 p-6">
-          <p className="text-base font-semibold">Could not load home screen</p>
-          <p className="mt-2 text-sm text-red-100">home_data_missing</p>
-        </div>
-      </main>
-    );
-  }
+  const balanceLabel = wallet ? centsToLabel(wallet.balanceCents) : "0.00";
+  const currency = wallet?.currency ?? "ETB";
 
   return (
-    <main className="min-h-screen bg-star-grid text-white">
-      <div className="star-noise fixed inset-0 pointer-events-none" />
-      <div className="relative mx-auto max-w-md px-4 pb-28 pt-4">
-        <header className="mb-4 flex items-start justify-between">
-          <div>
-            <h1 className="text-[34px] font-bold leading-none tracking-tight">
-              {home.user.greetingTitle}
-            </h1>
-            <p className="mt-1 text-sm uppercase tracking-[0.15em] text-cyan-100/80">
-              {home.user.greetingSubtitle}
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <button
-              className="rounded-full border border-cyan-400/40 bg-[#052047] p-3 shadow-glow"
-              aria-label="refresh"
-            >
-              <RefreshCw size={18} />
-            </button>
-            <button className="rounded-full bg-[#0a8fff] px-4 py-3 text-xs font-bold tracking-[0.14em] text-white shadow-glow">
-              + DEPOSIT
-            </button>
-          </div>
-        </header>
-
-        <section className="card-ring rounded-3xl bg-gradient-to-br from-[#4f7fff] via-[#4c69ff] to-[#6248ff] p-5 shadow-glow">
-          <p className="text-xs font-semibold tracking-[0.2em] text-cyan-50/85">
-            {home.ui.balanceCard.title}
-          </p>
-          <p className="mt-1 text-5xl font-bold leading-none tracking-wide">
-            {home.wallet.currency}{" "}
-            <span className="text-4xl">{home.wallet.balanceLabel}</span>
-          </p>
-          <p className="mt-5 text-xs font-semibold tracking-[0.2em] text-cyan-50/85">
-            {home.ui.balanceCard.bonusTitle}
-          </p>
-          <p className="mt-1 text-3xl font-bold">
-            {home.wallet.bonusLabel} {home.wallet.currency}
-          </p>
-          <p className="mt-3 text-right text-4xl font-bold text-white/25">
-            {home.ui.balanceCard.brandWatermark}
-          </p>
-        </section>
-
-        <button className="mt-5 flex w-full items-center justify-center gap-3 rounded-xl border border-cyan-400/60 bg-[#02133a]/80 px-4 py-3 text-sm font-semibold tracking-[0.12em] text-cyan-50">
-          <Users size={16} />
-          <span>{home.ui.inviteCta.label}</span>
-        </button>
-
-        <section className="mt-7">
-          <div className="mb-4 flex items-center gap-2 text-cyan-100/90">
-            <Zap size={18} />
-            <h2 className="text-2xl font-semibold tracking-wide">
-              {home.ui.section.roomsTitle}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            {roomRows.map((room, index) => (
-              <article
-                key={room.roomId}
-                className="relative cursor-pointer overflow-hidden rounded-3xl p-4 shadow-glow"
-                style={{
-                  background: `linear-gradient(165deg, ${room.style.gradientFrom}, ${room.style.gradientTo})`,
-                }}
-                onClick={() => openRoom(room)}
-              >
-                <p className="text-[11px] font-semibold tracking-[0.16em] text-white/85">
-                  {room.codeName}
-                </p>
-                <p className="mt-3 text-4xl font-black leading-none tracking-wide">
-                  {room.priceLabel}
-                </p>
-                <button
-                  className="mt-14 rounded-full bg-cyan-200/25 px-5 py-2 text-xs font-bold tracking-[0.12em]"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openRoom(room);
-                  }}
-                >
-                  {room.ctaLabel}
-                </button>
-                <div className="pointer-events-none absolute -bottom-5 -right-2 text-5xl drop-shadow-[0_5px_14px_rgba(0,0,0,0.28)]">
-                  {roomIcon(index)}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+    <div className="bg-background min-h-svh w-full h-screen max-h-screen overflow-y-auto custom-scrollbar transition-colors duration-500">
+      {/* Dynamic Patterned Background */}
+      <div className="fixed inset-0 z-0 opacity-[0.03] pointer-events-none select-none">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, var(--foreground) 1px, transparent 0)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div className="text-foreground text-[10vw] font-black break-all whitespace-pre-wrap leading-tight p-4 mix-blend-overlay">
+          {Array.from({ length: 120 }).map((_, idx) => (
+            <span key={idx} className="opacity-10 mr-4">
+              M-Bingo
+            </span>
+          ))}
+        </div>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-cyan-400/20 bg-[#0a0820]/95 px-2 pb-[calc(8px+env(safe-area-inset-bottom,0px))] pt-2 backdrop-blur">
-        <ul className="mx-auto grid max-w-md grid-cols-4 gap-1">
-          {home.ui.tabs.map((tab) => (
-            <li key={tab.key}>
-              <button
-                className={`flex w-full flex-col items-center rounded-xl py-2 text-xs ${
-                  tab.active ? "bg-[#112855] text-cyan-200" : "text-cyan-100/75"
-                }`}
-              >
-                <span className="text-lg">{tabIcon(tab.key)}</span>
-                <span>{tab.label}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <div className="relative z-10 max-w-[430px] mx-auto flex flex-col pb-24">
+        <MobileHeader />
 
-      {error ? (
-        <div className="fixed right-3 top-3 z-30 rounded-lg bg-amber-400/20 px-3 py-2 text-xs text-amber-100">
-          {error}
+        <BalanceCard balance={balanceLabel} currency={currency} />
+
+        <div className="px-4 hidden mt-4">
+          <button className="w-full bg-primary/10 border-primary/20 hover:bg-primary/20 transition-all border py-2.5 rounded-2xl text-primary font-black tracking-widest  shadow-xl shadow-primary/5 active:scale-95 group">
+            <span className="flex items-center justify-center gap-2">
+              <span className="text-lg"></span> instructions
+            </span>
+          </button>
         </div>
-      ) : null}
-    </main>
+
+        <button
+          className="flex justify-center border border-blue-600 px-4 mx-4 py-2 rounded-[8px] items-center gap-3 mt-6 text-muted-foreground hover:text-primary transition-colors text-xs font-black uppercase tracking-widest active:scale-95"
+          onClick={() => setIsInviteModalOpen(true)}
+        >
+          <Users size={16} className="text-primary" />
+          <span>invite</span>
+        </button>
+
+        {/* Game Grid Container */}
+        <div className="px-4 mt-8 flex items-center justify-between">
+          <h2 className="text-sm font-black capitalize tracking-[0.2em] text-foreground/40 flex items-center gap-2">
+            <Zap size={14} className="text-primary" /> available rooms
+          </h2>
+          <span className="h-px flex-1 bg-linear-to-r from-primary/20 to-transparent ml-4" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 p-4 mt-2">
+          {rooms.length === 0 ? (
+            <div className="col-span-2 py-20 text-center flex flex-col items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-primary/5 flex items-center justify-center border border-primary/10">
+                <LayoutGrid className="text-primary/40" />
+              </div>
+              <p className="text-muted-foreground font-black uppercase tracking-widest text-[10px]">
+                No rooms
+              </p>
+            </div>
+          ) : (
+            rooms.map((room) => (
+              <div key={room.id} onClick={() => openRoom(room)}>
+                <GameCard
+                  name={room.name}
+                  price={room.price}
+                  color={room.color}
+                  id={room.id}
+                  canAfford={
+                    wallet ? wallet.balanceCents >= room.boardPriceCents : true
+                  }
+                  isLive={room.isLive}
+                />
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Extra Bottom Padding for Nav */}
+        <div className="h-4" />
+      </div>
+    </div>
   );
 }

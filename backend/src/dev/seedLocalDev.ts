@@ -80,6 +80,7 @@ async function ensureRoom(agentId: string) {
       description: "Seeded room for local end-to-end tests",
       boardPriceCents: 1000,
       status: "active",
+      color: "from-blue-500 to-blue-700",
       maxPlayers: 500,
     })
     .returning({ id: rooms.id });

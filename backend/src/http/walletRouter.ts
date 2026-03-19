@@ -1,6 +1,9 @@
+import { eq, sql } from "drizzle-orm";
 import { Router } from "express";
 import { z } from "zod";
 
+import { db } from "../db/client.js";
+import { walletLedger } from "../db/schema.js";
 import { asyncHandler } from "./asyncHandler.js";
 import { requireAuth } from "./authMiddleware.js";
 import {
@@ -58,6 +61,60 @@ router.post(
         error instanceof Error ? error.message : "deposit_create_failed";
       const status = reason.includes("invalid_amount") ? 400 : 500;
       res.status(status).json({ error: reason });
+    }
+  }),
+);
+
+router.post(
+  "/wallet/withdraw",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    if (!req.identity) {
+      res.status(401).json({ error: "unauthorized" });
+      return;
+    }
+
+    if (req.identity.role !== "USER") {
+      res.status(403).json({ error: "forbidden" });
+      return;
+    }
+
+    const { amount, phone } = req.body;
+    const amountCents = Math.round(Number(amount) * 100);
+
+    if (isNaN(amountCents) || amountCents <= 0) {
+      res.status(400).json({ error: "invalid_amount" });
+      return;
+    }
+
+    try {
+      await db.transaction(async (tx) => {
+        const [summary] = await tx
+          .select({
+            balanceCents: sql<number>`coalesce(sum(case when ${walletLedger.status} = 'posted' then ${walletLedger.amountCents} else 0 end), 0)`,
+          })
+          .from(walletLedger)
+          .where(eq(walletLedger.userId, req.identity!.userId));
+
+        const currentBalance = summary?.balanceCents ?? 0;
+        if (currentBalance < amountCents) {
+          throw new Error("insufficient_funds");
+        }
+
+        await tx.insert(walletLedger).values({
+          userId: req.identity!.userId,
+          entryType: "withdrawal",
+          amountCents: -amountCents,
+          idempotencyKey: `withdraw_${Date.now()}_${req.identity!.userId}`,
+          metadata: { phone },
+          status: "posted",
+        });
+      });
+
+      res.status(200).json({ ok: true, success: true });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "withdraw_failed";
+      res.status(400).json({ error: message });
     }
   }),
 );

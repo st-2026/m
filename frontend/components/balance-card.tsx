@@ -1,11 +1,15 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
 import Logo from "./logo";
-import { useTranslations } from "next-intl";
 import CountUp from "react-countup";
 
-export function BalanceCard() {
-  const t = useTranslations("balanceCard");
+export function BalanceCard({
+  balance,
+  currency,
+}: {
+  balance?: string;
+  currency?: string;
+}) {
   const isLoading = false; // Replace with actual loading state
   return (
     <div className="relative mx-4 mt-2 overflow-hidden rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 p-5 shadow-lg shadow-blue-500/20">
@@ -43,19 +47,23 @@ export function BalanceCard() {
           <>
             <div className="flex  flex-col">
               <span className="text-white/80 text-xs font-medium uppercase tracking-wider">
-                {t("balanceLabel")}
+                Balance
               </span>
               <span className="text-white text-3xl font-black">
-                <CountUp
-                  start={0}
-                  end={Number(20)}
-                  duration={1.5}
-                  separator=","
-                  decimals={2}
-                  decimal="."
-                  prefix="ETB "
-                  className="text-white text-3xl font-black"
-                />
+                {balance ? (
+                  `${currency} ${balance}`
+                ) : (
+                  <CountUp
+                    start={0}
+                    end={20}
+                    duration={1.5}
+                    separator=","
+                    decimals={2}
+                    decimal="."
+                    prefix="ETB "
+                    className="text-white text-3xl font-black"
+                  />
+                )}
               </span>
             </div>
 
@@ -63,11 +71,9 @@ export function BalanceCard() {
 
             <div className="flex flex-col">
               <span className="text-white/80 text-xs font-medium uppercase tracking-wider">
-                {t("bonusLabel")}
+                Bonus
               </span>
-              <span className="text-white text-xl font-bold">
-                {t("bonusValue", { amount: 0 })}
-              </span>
+              <span className="text-white text-xl font-bold">ETB 0.00</span>
             </div>
           </>
         )}

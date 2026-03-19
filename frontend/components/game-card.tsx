@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { InsufficientBalanceModal } from "./insufficient-balance-modal";
-import { useTranslations } from "next-intl";
 
 interface GameCardProps {
   name: string;
@@ -30,15 +29,14 @@ export function GameCard({
 }: GameCardProps) {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-  const t = useTranslations("gameCard");
 
   return (
     <>
       <div
         className={cn(
-          "relative flex flex-col bg-linear-to-br   justify-between p-4 rounded-2xl h-40 overflow-hidden shadow-xl transition-all active:scale-95 group border border-foreground/10",
+          "relative flex flex-col bg-linear-to-br justify-between p-4 rounded-2xl h-40 overflow-hidden shadow-xl transition-all active:scale-95 group border border-foreground/10",
           color,
-          !canAfford && " cursor-not-allowed",
+          !canAfford && "cursor-not-allowed",
         )}
         onClick={() => {
           if (!canAfford) {
@@ -74,7 +72,7 @@ export function GameCard({
         </div>
 
         <button className="relative z-10 w-fit px-4 py-2 bg-foreground/10 hover:bg-foreground/20 backdrop-blur-xl rounded-xl text-foreground text-[10px] font-black tracking-wider uppercase transition-all border border-foreground/10 shadow-lg shadow-black/20">
-          {t("playNow")}
+          Play Now
         </button>
 
         {/* Premium Icon Graphic */}
