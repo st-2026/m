@@ -14,6 +14,7 @@ import {
 } from "@/lib/api";
 import { saveStoredGameResult } from "@/lib/game-result";
 import { closeSocket, connectSocket } from "@/lib/socket";
+import LiveGameLoader from "@/components/live-game-loader";
 
 const TOKEN_KEY = "mella_token";
 const BOARD_KEY_PREFIX = "mella_board_";
@@ -595,13 +596,7 @@ export default function GameSessionPage() {
   }
 
   if (!myBoard) {
-    return (
-      <main className="min-h-screen bg-[#020815] text-white">
-        <div className="mx-auto max-w-md p-6 text-center text-sm text-cyan-100/80">
-          Loading game session...
-        </div>
-      </main>
-    );
+    return <LiveGameLoader />;
   }
 
   return (
