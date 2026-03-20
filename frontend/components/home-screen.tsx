@@ -257,6 +257,7 @@ export function HomeScreen() {
                   price={room.price}
                   color={room.color}
                   id={room.id}
+                  icon={room.icon || ""}
                   canAfford={
                     wallet ? wallet.balanceCents >= room.boardPriceCents : true
                   }
@@ -271,9 +272,9 @@ export function HomeScreen() {
         <div className="h-4" />
       </div>
 
-      <InviteModal 
-        isOpen={isInviteModalOpen} 
-        onClose={() => setIsInviteModalOpen(false)} 
+      <InviteModal
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
       />
     </div>
   );
