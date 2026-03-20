@@ -24,7 +24,7 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
   const isLoading = false;
   const codeData = { referralCode: "DEVAGENT" };
 
-  const botUsername = process.env.NEXT_PUBLIC_BOT_USERNAME || "mella_bingo_bot";
+  const botUsername = process.env.NEXT_PUBLIC_BOT_USERNAME || "mella_agent_bot";
   const referralCode = codeData?.referralCode || "";
   const baseBotUrl = `https://t.me/${botUsername}`;
   const encodedCode = referralCode ? encodeURIComponent(referralCode) : "";
