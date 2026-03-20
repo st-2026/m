@@ -3,10 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Crown,
-  Flame,
   Gamepad2,
-  Gem,
   LayoutGrid,
   Settings,
   Sparkles,
@@ -20,118 +17,61 @@ import type { Socket } from "socket.io-client";
 import { MobileHeader } from "@/components/mobile-header";
 import { BalanceCard } from "@/components/balance-card";
 import { GameCard } from "@/components/game-card";
+import { AuthScreen } from "@/components/auth-screen";
+import InviteModal from "@/components/referral/InviteModal";
 
-import {
-  fetchRooms,
-  fetchWallet,
-  loginLocalDev,
-  signupLocalDev,
-  verifyTelegramAndGetToken,
-  type RoomItem,
-  type WalletSummary,
-} from "@/lib/api";
+import { useGetRoomsQuery, useGetWalletQuery, type RoomItem } from "@/lib/api";
+import { useAuth } from "@/hooks/use-auth";
 import { closeSocket, connectSocket } from "@/lib/socket";
-import { getTelegramInitData, initTelegramWebApp } from "@/lib/telegram";
 import { useTranslations } from "next-intl";
 
-type LoadingState = "boot" | "ready" | "error";
-type DevAuthMode = "login" | "signup";
-
 const FALLBACK_TOKEN_KEY = "mella_token";
-
-function tabIcon(key: string) {
-  if (key === "play") return <Gamepad2 size={18} />;
-  if (key === "wallet") return <Wallet size={18} />;
-  if (key === "profile") return <User size={18} />;
-  return <Settings size={18} />;
-}
 
 function centsToLabel(cents: number): string {
   return (cents / 100).toFixed(2);
 }
-
 export function HomeScreen() {
   const router = useRouter();
   const authT = useTranslations("auth");
-  const [state, setState] = useState<LoadingState>("boot");
-  const [showDevAuth, setShowDevAuth] = useState(false);
-  const [devAuthMode, setDevAuthMode] = useState<DevAuthMode>("login");
-  const [devEmail, setDevEmail] = useState("");
-  const [devPassword, setDevPassword] = useState("");
-  const [devFirstName, setDevFirstName] = useState("");
-  const [devReferralCode, setDevReferralCode] = useState("DEVAGENT");
-  const [error, setError] = useState<string>("");
+  const { status, login, signup, error: authError } = useAuth();
 
-  const [rooms, setRooms] = useState<RoomItem[]>([]);
-  const [wallet, setWallet] = useState<WalletSummary | null>(null);
+  const {
+    data: rooms = [],
+    isLoading: isRoomsLoading,
+    isError: isRoomsError,
+    refetch: refetchRooms,
+  } = useGetRoomsQuery({ skip: status !== "authenticated" });
+  const {
+    data: walletData,
+    isLoading: isWalletLoading,
+    isError: isWalletError,
+    refetch: refetchWallet,
+  } = useGetWalletQuery(undefined, { skip: status !== "authenticated" });
 
-  async function loadData(token: string) {
-    const [roomsData, walletData] = await Promise.all([
-      fetchRooms(token),
-      fetchWallet(token),
-    ]);
-    return { roomsData, walletData };
-  }
+  const wallet = walletData
+    ? {
+        balanceCents: (walletData.balance || 0) * 100,
+        bonusCents: (walletData.bonus || 0) * 100,
+        currency: walletData.currency,
+      }
+    : null;
 
   useEffect(() => {
-    let alive = true;
+    if (status !== "authenticated" || !localStorage.getItem(FALLBACK_TOKEN_KEY))
+      return;
+
     let socket: Socket | null = null;
+    const token = localStorage.getItem(FALLBACK_TOKEN_KEY)!;
 
-    async function boot() {
-      try {
-        initTelegramWebApp();
-
-        const initData = getTelegramInitData();
-        const stored =
-          typeof window !== "undefined"
-            ? localStorage.getItem(FALLBACK_TOKEN_KEY)
-            : null;
-
-        if (!initData && !stored) {
-          setShowDevAuth(true);
-          setState("error");
-          setError("local_auth_required");
-          return;
-        }
-
-        const token = initData
-          ? await verifyTelegramAndGetToken(initData)
-          : stored || "";
-
-        if (!token) {
-          throw new Error("missing_auth_token");
-        }
-
-        localStorage.setItem(FALLBACK_TOKEN_KEY, token);
-
-        const { roomsData, walletData } = await loadData(token);
-        if (!alive) return;
-
-        setRooms(roomsData);
-        setWallet(walletData);
-        setState("ready");
-
-        socket = connectSocket(token);
-      } catch (err) {
-        if (!alive) return;
-        if (err instanceof Error && err.message === "missing_auth_token") {
-          setShowDevAuth(true);
-        }
-        setState("error");
-        setError(err instanceof Error ? err.message : "load_failed");
-      }
-    }
-
-    void boot();
+    socket = connectSocket(token);
 
     return () => {
-      alive = false;
       if (socket) {
         socket.removeAllListeners();
       }
       closeSocket();
     };
-  }, []);
+  }, [status]);
 
   function openRoom(room: RoomItem) {
     router.push(`/rooms/${room.id}`);
@@ -139,8 +79,10 @@ export function HomeScreen() {
 
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
-  if (state === "boot") {
-
+  if (
+    status === "boot" ||
+    (status === "authenticated" && (isRoomsLoading || isWalletLoading))
+  ) {
     return (
       <main className="min-h-svh bg-background flex flex-col items-center justify-center p-6 text-foreground relative overflow-hidden">
         {/* Animated Background Orbs */}
@@ -222,132 +164,21 @@ export function HomeScreen() {
     );
   }
 
-  if (state === "error") {
-    if (showDevAuth) {
-      return (
-        <main className="min-h-screen bg-background p-4 text-foreground">
-          <div className="relative mx-auto mt-20 max-w-md rounded-2xl border border-primary/30 bg-muted/90 p-5">
-            <p className="text-xs uppercase tracking-[0.18em] text-primary/70">
-              Local Dev Mode
-            </p>
-            <h2 className="mt-2 text-2xl font-bold">
-              {devAuthMode === "login" ? "Login" : "Sign Up"}
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Use email/password to test end-to-end without Telegram bot setup.
-            </p>
-
-            <form
-              className="mt-4 space-y-3"
-              onSubmit={async (e) => {
-                e.preventDefault();
-                setError("");
-
-                try {
-                  const token =
-                    devAuthMode === "login"
-                      ? await loginLocalDev({
-                          email: devEmail,
-                          password: devPassword,
-                        })
-                      : await signupLocalDev({
-                          email: devEmail,
-                          password: devPassword,
-                          firstName: devFirstName || undefined,
-                          referralCode: devReferralCode || undefined,
-                        });
-
-                  localStorage.setItem(FALLBACK_TOKEN_KEY, token);
-                  const { roomsData, walletData } = await loadData(token);
-                  setRooms(roomsData);
-                  setWallet(walletData);
-                  setState("ready");
-                  setShowDevAuth(false);
-                } catch {
-                  setError(
-                    devAuthMode === "login"
-                      ? "Local login failed. Check credentials or enable LOCAL_DEV_AUTH_ENABLED."
-                      : "Local signup failed. Email may already exist.",
-                  );
-                }
-              }}
-            >
-              <input
-                value={devEmail}
-                onChange={(e) => setDevEmail(e.target.value)}
-                type="email"
-                required
-                placeholder="you@example.com"
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none"
-              />
-              <input
-                value={devPassword}
-                onChange={(e) => setDevPassword(e.target.value)}
-                type="password"
-                required
-                minLength={6}
-                placeholder="password"
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none"
-              />
-              {devAuthMode === "signup" ? (
-                <>
-                  <input
-                    value={devFirstName}
-                    onChange={(e) => setDevFirstName(e.target.value)}
-                    type="text"
-                    placeholder="first name (optional)"
-                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none"
-                  />
-                  <input
-                    value={devReferralCode}
-                    onChange={(e) =>
-                      setDevReferralCode(e.target.value.toUpperCase())
-                    }
-                    type="text"
-                    placeholder="referral code (e.g. DEVAGENT)"
-                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none"
-                  />
-                </>
-              ) : null}
-
-              <button
-                type="submit"
-                className="w-full rounded-lg bg-primary px-4 py-3 text-sm font-bold tracking-[0.1em] text-primary-foreground"
-              >
-                {devAuthMode === "login" ? "LOGIN" : "SIGN UP"}
-              </button>
-            </form>
-
-            <button
-              className="mt-3 text-xs text-primary underline"
-              onClick={() =>
-                setDevAuthMode((prev) =>
-                  prev === "login" ? "signup" : "login",
-                )
-              }
-            >
-              {devAuthMode === "login"
-                ? "No account? Create one"
-                : "Already have an account? Login"}
-            </button>
-
-            {error ? (
-              <p className="mt-2 text-xs text-destructive">{error}</p>
-            ) : null}
-          </div>
-        </main>
-      );
-    }
-
+  if (
+    status === "unauthenticated" ||
+    status === "error" ||
+    isRoomsError ||
+    isWalletError
+  ) {
     return (
-      <main className="min-h-screen bg-background p-4 text-foreground">
-        <div className="relative mx-auto mt-28 max-w-md rounded-2xl border border-destructive/30 bg-destructive/10 p-6">
-          <p className="text-base font-semibold">Could not load home screen</p>
-          <p className="mt-2 text-sm text-destructive">
-            {error || "Unknown error"}
-          </p>
-        </div>
-      </main>
+      <AuthScreen
+        status={status}
+        authError={authError}
+        isRoomsError={isRoomsError}
+        isWalletError={isWalletError}
+        login={login}
+        signup={signup}
+      />
     );
   }
 
@@ -375,7 +206,12 @@ export function HomeScreen() {
       </div>
 
       <div className="relative z-10 max-w-[430px] mx-auto flex flex-col pb-24">
-        <MobileHeader />
+        <MobileHeader
+          refetch={() => {
+            refetchRooms();
+            refetchWallet();
+          }}
+        />
 
         <BalanceCard balance={balanceLabel} currency={currency} />
 
@@ -434,6 +270,11 @@ export function HomeScreen() {
         {/* Extra Bottom Padding for Nav */}
         <div className="h-4" />
       </div>
+
+      <InviteModal 
+        isOpen={isInviteModalOpen} 
+        onClose={() => setIsInviteModalOpen(false)} 
+      />
     </div>
   );
 }

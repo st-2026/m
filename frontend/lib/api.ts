@@ -453,6 +453,25 @@ export function useGetWalletQuery(_?: any, options?: { skip?: boolean }) {
         }
       : undefined,
     isLoading: query.isLoading,
+    isError: query.isError,
+    error: query.error,
+    refetch: query.refetch,
+  };
+}
+
+export function useGetRoomsQuery(options?: { skip?: boolean }) {
+  const token = getAuthToken();
+  const query = useQuery({
+    queryKey: ["rooms"],
+    queryFn: () => fetchRooms(token),
+    enabled: !options?.skip && !!token,
+  });
+  return {
+    data: query.data,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    error: query.error,
+    refetch: query.refetch,
   };
 }
 
@@ -681,5 +700,32 @@ export function useApproveDepositMutation() {
   };
 
   return [mutate, { isLoading: mutation.isPending }] as const;
+}
+
+export function useLoginLocalMutation() {
+  const mutation = useMutation({
+    mutationFn: (input: { email: string; password: string }) =>
+      loginLocalDev(input),
+  });
+  return mutation;
+}
+
+export function useSignupLocalMutation() {
+  const mutation = useMutation({
+    mutationFn: (input: {
+      email: string;
+      password: string;
+      firstName?: string;
+      referralCode?: string;
+    }) => signupLocalDev(input),
+  });
+  return mutation;
+}
+
+export function useVerifyTelegramMutation() {
+  const mutation = useMutation({
+    mutationFn: (initData: string) => verifyTelegramAndGetToken(initData),
+  });
+  return mutation;
 }
 

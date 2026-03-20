@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import type { AbstractIntlMessages } from "next-intl";
 import { LocaleSync } from "./locale-sync";
 import { QueryProvider } from "./query-provider";
+import { AuthProvider } from "./auth.provider";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -17,8 +18,10 @@ const Provider = ({ children, locale, messages }: ProviderProps) => {
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <NextIntlClientProvider locale={locale} messages={messages}>
         <QueryProvider>
-          <LocaleSync />
-          {children}
+          <AuthProvider>
+            <LocaleSync />
+            {children}
+          </AuthProvider>
         </QueryProvider>
       </NextIntlClientProvider>
     </ThemeProvider>
