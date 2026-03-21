@@ -1319,7 +1319,8 @@
       "game_win": "Game Win",
       "game_lost": "Game Fee",
       "referral_reward": "Referral Reward",
-      "welcome_bonus": "Welcome Bonus"
+      "welcome_bonus": "Welcome Bonus",
+      "referral_commission": "Referral Commission"
     },
     "status": {
       "completed": "Completed",
