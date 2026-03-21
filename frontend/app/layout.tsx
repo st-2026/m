@@ -59,7 +59,7 @@ export default async function RootLayout({
 }>) {
   const maintenanceMode = false;
 
-  let locale = "am";
+  let locale = "en";
 
   let messages: Awaited<ReturnType<typeof getMessages>> | null = null;
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { AgentSidebar } from "./AgentSidebar";
-import { AgentBottomNav } from "./AgentBottomNav";
 
 interface AgentLayoutProps {
   children: React.ReactNode;
