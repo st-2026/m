@@ -43,6 +43,7 @@ export const patternTypeEnum = pgEnum("pattern_type", [
   "column",
   "diagonal",
   "full_house",
+  "corners",
 ]);
 
 export const ledgerTypeEnum = pgEnum("ledger_type", [

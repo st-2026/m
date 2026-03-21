@@ -2,16 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Gamepad2,
-  LayoutGrid,
-  Settings,
-  Sparkles,
-  User,
-  Users,
-  Wallet,
-  Zap,
-} from "lucide-react";
+import { LayoutGrid, Sparkles, Users, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Socket } from "socket.io-client";
 import { MobileHeader } from "@/components/mobile-header";
@@ -259,7 +250,7 @@ export function HomeScreen() {
                   id={room.id}
                   icon={room.icon || ""}
                   canAfford={
-                    wallet ? wallet.balanceCents >= room.boardPriceCents : true
+                    wallet ? wallet.balanceCents >= room.boardPriceCents : false
                   }
                   isLive={room.isLive}
                 />
