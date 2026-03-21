@@ -15,7 +15,7 @@ export function AgentLayout({ children }: AgentLayoutProps) {
 
       {/* Main Content */}
       <div className="md:pl-64">
-        <div className="container max-w-7xl mx-auto p-4 md:p-8 pt-6 pb-28 md:pb-8">
+        <div className="md:container max-w-7xl mx-auto p-4 md:p-8 pt-6 pb-28 md:pb-8">
           {children}
         </div>
       </div>
