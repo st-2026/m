@@ -7,7 +7,6 @@ import {
   Users,
   Search,
   MoreVertical,
-  Trash2,
   ExternalLink,
   User as UserIcon,
   Crown,
@@ -25,17 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { useGetAgentUsersQuery, useDeleteUserMutation } from "@/lib/api";
+import { useGetAgentUsersQuery } from "@/lib/api";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -69,23 +58,10 @@ export default function AgentUsersPage() {
     isFetching,
     refetch,
   } = useGetAgentUsersQuery(queryArgs);
-  const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
-  const [userToDelete, setUserToDelete] = useState<string | null>(null);
   const users = usersData?.users ?? [];
   const total = usersData?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const isLoading = isFetching && !usersData;
-
-  const handleDelete = async () => {
-    if (!userToDelete) return;
-    try {
-      await deleteUser(userToDelete).unwrap();
-      toast.success(t("toast.deleted"));
-      setUserToDelete(null);
-    } catch (err: any) {
-      toast.error(err.data?.error || t("toast.deleteFailed"));
-    }
-  };
 
   const handleViewDetails = (userId: string) => {
     router.push(`/Agent/users/${userId}`);
@@ -340,13 +316,6 @@ export default function AgentUsersPage() {
                               <ExternalLink className="h-3 w-3" />
                               {t("actions.details")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => setUserToDelete(user.id)}
-                              className="gap-2 text-xs text-red-500 focus:bg-red-500/10"
-                            >
-                              <Trash2 className="h-3 w-3" />
-                              {t("actions.delete")}
-                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -413,13 +382,6 @@ export default function AgentUsersPage() {
                           <ExternalLink className="h-3 w-3" />
                           {t("actions.details")}
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => setUserToDelete(user.id)}
-                          className="gap-2 text-xs text-red-500 focus:bg-red-500/10"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                          {t("actions.delete")}
-                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
@@ -480,25 +442,6 @@ export default function AgentUsersPage() {
         </div>
       </div>
 
-      <AlertDialog
-        open={!!userToDelete}
-        onOpenChange={() => setUserToDelete(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("confirmDelete.title")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("confirmDelete.description")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t("actions.cancel")}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>
-              {isDeleting ? t("actions.deleting") : t("actions.delete")}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

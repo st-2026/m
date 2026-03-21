@@ -1,7 +1,6 @@
 "use client";
 import React, { useDeferredValue, useMemo, useState } from "react";
 import {
-  useDeleteAgentTransactionMutation,
   useGetAgentTransactionsQuery,
 } from "@/lib/api";
 import { Loader2, MoreHorizontal, XCircle } from "lucide-react";
@@ -18,16 +17,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 export default function TransactionTable() {
   const [page, setPage] = useState(1);
@@ -39,23 +28,6 @@ export default function TransactionTable() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const deferredSearch = useDeferredValue(search.trim());
   const [selected, setSelected] = useState<Transaction | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<Transaction | null>(null);
-  const [deleteTransaction, { isLoading: isDeleting }] =
-    useDeleteAgentTransactionMutation();
-
-  const confirmDelete = async () => {
-    if (!deleteTarget) return;
-    try {
-      await deleteTransaction({ id: deleteTarget.id }).unwrap();
-      toast.success("Transaction deleted");
-      if (selected?.id === deleteTarget.id) {
-        setSelected(null);
-      }
-      setDeleteTarget(null);
-    } catch (error: any) {
-      toast.error(error?.data?.error || "Failed to delete transaction");
-    }
-  };
   const queryArgs = useMemo(
     () => ({
       page,
@@ -243,12 +215,6 @@ export default function TransactionTable() {
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        className="text-destructive focus:text-destructive"
-                        onClick={() => setDeleteTarget(tx)}
-                      >
-                        Delete
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
                         onClick={() => navigator.clipboard.writeText(tx.id)}
                       >
                         Copy ID
@@ -309,12 +275,6 @@ export default function TransactionTable() {
                       View Details
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-destructive focus:text-destructive"
-                      onClick={() => setDeleteTarget(tx)}
-                    >
-                      Delete
-                    </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => navigator.clipboard.writeText(tx.id)}
                     >
@@ -377,43 +337,6 @@ export default function TransactionTable() {
         <TransactionDetail tx={selected} onClose={() => setSelected(null)} />
       )}
 
-      <AlertDialog
-        open={!!deleteTarget}
-        onOpenChange={(open: boolean) => {
-          if (!open) setDeleteTarget(null);
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete transaction?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete transaction {deleteTarget?.id}. The
-              user’s balance will be recalculated from remaining transactions.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction asChild>
-              <Button
-                variant="destructive"
-                disabled={isDeleting}
-                onClick={(event) => {
-                  event.preventDefault();
-                  confirmDelete();
-                }}
-              >
-                {isDeleting ? (
-                  <>
-                    <Loader2 className="animate-spin" /> Deleting...
-                  </>
-                ) : (
-                  "Delete"
-                )}
-              </Button>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }
